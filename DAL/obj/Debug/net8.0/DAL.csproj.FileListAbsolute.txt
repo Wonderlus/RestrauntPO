@@ -1,0 +1,14 @@
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\DAL.csproj.AssemblyReference.cache
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\DAL.AssemblyInfoInputs.cache
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\DAL.AssemblyInfo.cs
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\DAL.csproj.CoreCompileInputs.cache
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\bin\Debug\net8.0\DAL.deps.json
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\bin\Debug\net8.0\DAL.runtimeconfig.json
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\bin\Debug\net8.0\DAL.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\bin\Debug\net8.0\DAL.pdb
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\DAL.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\refint\DAL.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\DAL.pdb
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\DAL.genruntimeconfig.cache
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\ref\DAL.dll

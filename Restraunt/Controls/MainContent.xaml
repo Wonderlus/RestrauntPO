@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="Restraunt.Controls.MainContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Restraunt.Controls"
+             xmlns:models="clr-namespace:Restraunt.Models;assembly=Models"
+ 
+                mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header row -->
+        <DockPanel Grid.Row="0" Margin="0,0,0,12">
+            <StackPanel DockPanel.Dock="Left">
+                <TextBlock Text="Dishes" FontSize="22" FontWeight="Bold" Foreground="{StaticResource OrangeText}"/>
+                <TextBlock Text="Manage your restaurant dishes" Foreground="#FFB07340" FontSize="12"/>
+            </StackPanel>
+            <Button DockPanel.Dock="Right" Style="{StaticResource PrimaryButton}" Content="+ Add new dish" Margin="0,0,0,0" MaxWidth="140" MaxHeight="40"/>
+        </DockPanel>
+
+        <!-- Cards -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="DishesList" ItemsSource="{Binding Dishes}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:DishModel}">
+                        <!-- Используем DishModel из Models -->
+                        <Border Width="250" Margin="0,0,16,16"
+                                Background="{StaticResource CardBg}"
+                                BorderBrush="{StaticResource OrangeBorder}"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="15" Foreground="{StaticResource OrangeText}"/>
+                                <TextBlock Text="{Binding CategoryName}" Foreground="#FFB07340" FontSize="11" Margin="0,2,0,6"/>
+                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" FontSize="11" Margin="0,0,0,6"/>
+
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4,0,4">
+                                    <TextBlock Text="{Binding Price}" FontWeight="Bold" Margin="0,0,8,0"/>
+                                    <TextBlock Text="{Binding IsSeasonal}" />
+                                </StackPanel>
+
+                                
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

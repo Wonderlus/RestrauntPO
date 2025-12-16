@@ -1,0 +1,17 @@
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\obj\Debug\net8.0\BLL.csproj.AssemblyReference.cache
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\obj\Debug\net8.0\BLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\obj\Debug\net8.0\BLL.AssemblyInfoInputs.cache
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\obj\Debug\net8.0\BLL.AssemblyInfo.cs
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\obj\Debug\net8.0\BLL.csproj.CoreCompileInputs.cache
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\bin\Debug\net8.0\BLL.deps.json
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\bin\Debug\net8.0\BLL.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\bin\Debug\net8.0\BLL.pdb
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\bin\Debug\net8.0\DAL.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\bin\Debug\net8.0\Models.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\bin\Debug\net8.0\DAL.pdb
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\bin\Debug\net8.0\Models.pdb
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\obj\Debug\net8.0\BLL.csproj.Up2Date
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\obj\Debug\net8.0\BLL.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\obj\Debug\net8.0\refint\BLL.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\obj\Debug\net8.0\BLL.pdb
+C:\Coding\ISPU\Конструирование ПО\Restraunt\BLL\obj\Debug\net8.0\ref\BLL.dll

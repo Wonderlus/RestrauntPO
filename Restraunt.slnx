@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="BLL/BLL.csproj" />
+  <Project Path="DAL/DAL.csproj" />
+  <Project Path="Models/Models.csproj" />
+  <Project Path="Restraunt/Restraunt.csproj" />
+</Solution>
