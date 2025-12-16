@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\App.xaml
-5-893560873
+6-391917225
 
-9-1981256488
+121726826737
 216-633699742
-Controls\Footer.xaml;Controls\MainContent.xaml;Controls\Sidebar.xaml;Controls\TopNavBar.xaml;MainWindow.xaml;
+Controls\Footer.xaml;Controls\MainContent.xaml;Controls\Sidebar.xaml;Controls\TopNavBar.xaml;MainWindow.xaml;Windows\DishEditWindow.xaml;
 
 False
 

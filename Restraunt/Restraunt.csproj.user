@@ -14,5 +14,8 @@
     <Compile Update="Controls\TopNavBar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Windows\DishEditWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

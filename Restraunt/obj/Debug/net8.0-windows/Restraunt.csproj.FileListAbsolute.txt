@@ -118,3 +118,6 @@ C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\MainContent.baml
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\Sidebar.baml
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\TopNavBar.baml
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Restraunt.sourcelink.json
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Windows\DishEditWindow.baml
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Windows\DishEditWindow.g.cs

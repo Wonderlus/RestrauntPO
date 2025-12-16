@@ -12,3 +12,4 @@ C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.
 C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\DAL.pdb
 C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\DAL.genruntimeconfig.cache
 C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\ref\DAL.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\DAL\obj\Debug\net8.0\DAL.sourcelink.json

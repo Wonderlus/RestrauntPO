@@ -1,0 +1,72 @@
+﻿<Window x:Class="Restraunt.Windows.DishEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dish"
+        Height="520"
+        Width="420"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{StaticResource OrangeBg}">
+
+    <Border Padding="20">
+        <StackPanel>
+
+            <TextBlock Text="Dish"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource OrangeText}"
+                       Margin="0,0,0,16"/>
+
+            <!-- Name -->
+            <TextBlock Text="Name"/>
+            <TextBox Text="{Binding Dish.Name, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,4,0,12"/>
+
+            <!-- Description -->
+            <TextBlock Text="Description"/>
+            <TextBox Text="{Binding Dish.Description}"
+                     Height="60"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     Margin="0,4,0,12"/>
+
+            <TextBlock Text="Category"/>
+            <ComboBox ItemsSource="{Binding Categories}"
+          DisplayMemberPath="Name"
+          SelectedValuePath="Id"
+          SelectedValue="{Binding Dish.CategoryId}"
+          Margin="0,4,0,12"/>
+
+            <!-- Price -->
+            <TextBlock Text="Price"/>
+            <TextBox Text="{Binding Dish.Price}"
+                     Margin="0,4,0,12"/>
+
+            <!-- Flags -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                <CheckBox Content="Seasonal"
+                          IsChecked="{Binding Dish.IsSeasonal}"
+                          Margin="0,0,16,0"/>
+                <CheckBox Content="Promotional"
+                          IsChecked="{Binding Dish.IsPromotional}"/>
+            </StackPanel>
+
+            <!-- Image -->
+            <TextBlock Text="Image path (resource)"/>
+            <TextBox Text="{Binding Dish.ImageUrl}"
+                     Margin="0,4,0,12"/>
+
+            <!-- Buttons -->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Content="Cancel"
+                        Margin="0,0,8,0"
+                        Click="Cancel_Click"/>
+                <Button Content="Save"
+                        Style="{StaticResource PrimaryButton}"
+                        Click="Save_Click"/>
+            </StackPanel>
+
+        </StackPanel>
+    </Border>
+</Window>

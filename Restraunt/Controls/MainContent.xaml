@@ -5,10 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Restraunt.Controls"
              xmlns:models="clr-namespace:Restraunt.Models;assembly=Models"
+             xmlns:conv="clr-namespace:Restraunt.Converters"
  
                 mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+        <conv:ImagePathToPackUriConverter x:Key="ImageConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -21,7 +25,16 @@
                 <TextBlock Text="Dishes" FontSize="22" FontWeight="Bold" Foreground="{StaticResource OrangeText}"/>
                 <TextBlock Text="Manage your restaurant dishes" Foreground="#FFB07340" FontSize="12"/>
             </StackPanel>
-            <Button DockPanel.Dock="Right" Style="{StaticResource PrimaryButton}" Content="+ Add new dish" Margin="0,0,0,0" MaxWidth="140" MaxHeight="40"/>
+            <Button DockPanel.Dock="Right"
+        Style="{StaticResource PrimaryButton}"
+        Content="+ Add new dish"
+        Click="AddDish_Click"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Center"
+        Margin="0,0,0,0"
+        MinWidth="140"
+        Height="40"/>
+
         </DockPanel>
 
         <!-- Cards -->
@@ -34,24 +47,89 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:DishModel}">
-                        <!-- Используем DishModel из Models -->
-                        <Border Width="250" Margin="0,0,16,16"
-                                Background="{StaticResource CardBg}"
-                                BorderBrush="{StaticResource OrangeBorder}"
-                                BorderThickness="1"
-                                CornerRadius="12"
-                                Padding="12">
+                        <Border Width="250"
+            Margin="0,0,16,16"
+            Background="{StaticResource CardBg}"
+            BorderBrush="{StaticResource OrangeBorder}"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="0">
+
                             <StackPanel>
-                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="15" Foreground="{StaticResource OrangeText}"/>
-                                <TextBlock Text="{Binding CategoryName}" Foreground="#FFB07340" FontSize="11" Margin="0,2,0,6"/>
-                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" FontSize="11" Margin="0,0,0,6"/>
 
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4,0,4">
-                                    <TextBlock Text="{Binding Price}" FontWeight="Bold" Margin="0,0,8,0"/>
-                                    <TextBlock Text="{Binding IsSeasonal}" />
-                                </StackPanel>
+                                <!-- Картинка -->
+                                <Grid Height="140">
+                                    <Image Source="{Binding ImageUrl, Converter={StaticResource ImageConverter}}"
+       Stretch="UniformToFill"/>
 
-                                
+
+                                    <!-- Бейджи -->
+                                    <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Margin="8">
+
+                                        <Border Background="#FFF59E0B"
+                            CornerRadius="6"
+                            Padding="6,2"
+                            Margin="0,0,6,0"
+                            Visibility="{Binding IsSeasonal, Converter={StaticResource BoolToVisibility}}">
+                                            <TextBlock Text="СЕЗОННОЕ"
+                                   Foreground="White"
+                                   FontSize="10"
+                                   FontWeight="Bold"/>
+                                        </Border>
+
+                                        <Border Background="#FFEF4444"
+                            CornerRadius="6"
+                            Padding="6,2"
+                            Visibility="{Binding IsPromotional, Converter={StaticResource BoolToVisibility}}">
+                                            <TextBlock Text="АКЦИЯ"
+                                   Foreground="White"
+                                   FontSize="10"
+                                   FontWeight="Bold"/>
+                                        </Border>
+
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Контент -->
+                                <Border Padding="12">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Name}"
+                           FontWeight="SemiBold"
+                           FontSize="15"
+                           Foreground="{StaticResource OrangeText}"/>
+
+                                        <TextBlock Text="{Binding CategoryName}"
+                           Foreground="#FFB07340"
+                           FontSize="11"
+                           Margin="0,2,0,6"/>
+
+                                        <TextBlock Text="{Binding Description}"
+                           TextWrapping="Wrap"
+                           FontSize="11"
+                           Margin="0,0,0,6"/>
+
+                                        <TextBlock Text="{Binding Price, StringFormat='{}{0} ₽'}"
+                           FontWeight="Bold"/>
+
+                                        <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0,8,0,0">
+                                            <Button Style="{StaticResource IconButton}"
+                            Content="✏"
+                            Margin="0,0,6,0"
+                            Tag="{Binding}"
+                            Click="EditDish_Click"/>
+                                            <Button Style="{StaticResource IconButton}"
+                            Content="🗑"
+                            Tag="{Binding}"
+                            Click="DeleteDish_Click"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
                             </StackPanel>
                         </Border>
                     </DataTemplate>

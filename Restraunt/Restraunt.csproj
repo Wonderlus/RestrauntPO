@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Images\Dishes\default.png" />
+    <None Remove="Assets\Images\Dishes\PizzaMargherita.webp" />
+    <None Remove="Assets\Images\Dishes\SushiSet.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
@@ -24,6 +30,12 @@
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\Dishes\default.png" />
+    <Resource Include="Assets\Images\Dishes\PizzaMargherita.webp" />
+    <Resource Include="Assets\Images\Dishes\SushiSet.jpg" />
   </ItemGroup>
 
 </Project>

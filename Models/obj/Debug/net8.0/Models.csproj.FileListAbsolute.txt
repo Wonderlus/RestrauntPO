@@ -12,3 +12,4 @@ C:\Coding\ISPU\Конструирование ПО\Restraunt\Models\obj\Debug\ne
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Models\obj\Debug\net8.0\Models.pdb
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Models\obj\Debug\net8.0\Models.genruntimeconfig.cache
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Models\obj\Debug\net8.0\ref\Models.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Models\obj\Debug\net8.0\Models.sourcelink.json
