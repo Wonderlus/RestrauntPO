@@ -68,5 +68,27 @@ namespace BLL
 
             return order.Id;
         }
+
+        public List<OrderEntity> GetOrdersByCustomer(int customerId)
+        {
+            using var context = new RestrauntContext();
+
+            return context.Orders
+    .Include(o => o.DeliveryAddress)
+    .Where(o => o.CustomerId == customerId)
+    .OrderByDescending(o => o.OrderDate)
+    .ToList();
+        }
+
+
+        public List<OrderItemEntity> GetOrderItems(int orderId)
+        {
+            using var context = new RestrauntContext();
+
+            return context.OrderItems
+                .Include(oi => oi.Dish)
+                .Where(oi => oi.OrderId == orderId)
+                .ToList();
+        }
     }
 }

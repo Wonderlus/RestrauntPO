@@ -11,6 +11,7 @@
   <ItemGroup>
     <None Remove="Assets\Images\Dishes\default.png" />
     <None Remove="Assets\Images\Dishes\PizzaMargherita.webp" />
+    <None Remove="Assets\Images\Dishes\PumpkinCreampie.jpg" />
     <None Remove="Assets\Images\Dishes\SushiSet.jpg" />
   </ItemGroup>
 
@@ -35,6 +36,7 @@
   <ItemGroup>
     <Resource Include="Assets\Images\Dishes\default.png" />
     <Resource Include="Assets\Images\Dishes\PizzaMargherita.webp" />
+    <Resource Include="Assets\Images\Dishes\PumpkinCreampie.jpg" />
     <Resource Include="Assets\Images\Dishes\SushiSet.jpg" />
   </ItemGroup>
 

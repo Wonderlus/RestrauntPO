@@ -131,11 +131,13 @@ C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\CustomersPage.g.cs
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\MenuSidebar.baml
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\MenuSidebar.g.cs
-C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\OrderSidebar.g.cs
-C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\OrderSidebar.baml
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\BasketPage.baml
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\BasketPage.g.cs
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Windows\CheckoutWindow.baml
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Windows\CheckoutWindow.g.cs
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\DeliveryAddressesPage.baml
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\DeliveryAddressesPage.g.cs
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\OrdersPage.baml
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\OrdersPage.g.cs
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\OrdersSidebar.g.cs
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\OrdersSidebar.baml

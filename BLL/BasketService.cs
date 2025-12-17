@@ -40,17 +40,16 @@ namespace BLL
 
             return context.Basket
                 .Where(b => b.CustomerId == customerId)
-                .Join(context.Dishes,
-                      b => b.DishId,
-                      d => d.Id,
-                      (b, d) => new BasketItemModel
-                      {
-                          DishId = d.Id,
-                          Name = d.Name,
-                          Price = d.Price,
-                          Quantity = b.Quantity
-                      })
+                .OrderBy(b => b.AddedAt)
+                .Select(b => new BasketItemModel
+                {
+                    DishId = b.DishId,
+                    Name = b.Dish.Name,
+                    Price = b.Dish.Price,
+                    Quantity = b.Quantity,
+                })
                 .ToList();
+
         }
 
         public void Remove(int customerId, int dishId)

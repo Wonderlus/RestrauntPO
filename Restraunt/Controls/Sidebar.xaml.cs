@@ -30,7 +30,10 @@ namespace Restraunt.Controls
         {
             Content = new MenuSidebar();
         }
-
+        public void SetOrdersSidebar()
+        {
+            Content = new OrdersSidebar();
+        }
         //public void SetOrdersSidebar()
         //{
         //    Content = new OrdersSidebar();

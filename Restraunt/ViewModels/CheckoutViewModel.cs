@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Restraunt.ViewModels
@@ -68,16 +69,44 @@ namespace Restraunt.ViewModels
 
         private void CreateOrder()
         {
+            // ⚠️ Проверка адреса при доставке
+            if (IsDelivery && SelectedAddress == null)
+            {
+                MessageBox.Show(
+                    "Пожалуйста, выберите адрес доставки",
+                    "Оформление заказа",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
             TimeSpan? eta = null;
 
             if (IsDelivery)
             {
-                if (!TimeSpan.TryParseExact(DeliveryTimeText, @"hh\:mm", CultureInfo.InvariantCulture, out var parsed))
-                    throw new Exception("Неверный формат времени. Используй HH:mm, например 01:30");
+                if (!TimeSpan.TryParseExact(
+                        DeliveryTimeText,
+                        @"hh\:mm",
+                        CultureInfo.InvariantCulture,
+                        out var parsed))
+                {
+                    MessageBox.Show(
+                        "Неверный формат времени.\nИспользуйте HH:mm, например 01:30",
+                        "Оформление заказа",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                    return;
+                }
 
                 eta = parsed;
             }
-
+            MessageBox.Show(
+    SelectedAddress == null
+        ? "SelectedAddress = NULL"
+        : $"SelectedAddress.Id = {SelectedAddress.Id}"
+);
             _orderService.CreateOrder(
                 Session.CurrentUser.Id,
                 SelectedOrderType,
@@ -88,6 +117,8 @@ namespace Restraunt.ViewModels
 
             OrderCreated?.Invoke();
         }
+
+
     }
 
 }

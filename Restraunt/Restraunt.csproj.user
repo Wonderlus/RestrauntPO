@@ -20,7 +20,10 @@
     <Compile Update="Controls\MenuSidebar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\OrderSidebar.xaml.cs">
+    <Compile Update="Controls\OrdersPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\OrdersSidebar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Controls\Sidebar.xaml.cs">

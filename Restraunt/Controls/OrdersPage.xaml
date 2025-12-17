@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="Restraunt.Controls.OrdersPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+        <!-- СПИСОК ЗАКАЗОВ -->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Заголовок -->
+            <TextBlock Grid.Row="0"
+               Text="Мои заказы"
+               FontSize="22"
+               FontWeight="Bold"
+               Foreground="{StaticResource OrangeText}"
+               Margin="0,0,0,16"/>
+
+            <!-- Список заказов со скроллом -->
+            <ListBox Grid.Row="1"
+             ItemsSource="{Binding Orders}"
+             SelectedItem="{Binding SelectedOrder}"
+             HorizontalContentAlignment="Stretch"
+             ScrollViewer.VerticalScrollBarVisibility="Auto"
+             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="{StaticResource OrangeBorder}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="12"
+                        Margin="0,0,0,0">
+
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold"
+                                   Text="{Binding OrderDate, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"/>
+
+                                <TextBlock Text="{Binding Status}"
+                                   Foreground="{StaticResource OrangeText}"/>
+
+                                <TextBlock FontWeight="SemiBold">
+                            <Run Text="Итого: "/>
+                            <Run Text="{Binding TotalAmount}"/>
+                            <Run Text=" ₽"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+        </Grid>
+
+
+        <!-- ДЕТАЛИ ЗАКАЗА -->
+        <Border Grid.Row="2"
+        Background="{StaticResource CardBg}"
+        BorderBrush="{StaticResource OrangeBorder}"
+        BorderThickness="1"
+        CornerRadius="12"
+        Padding="16"
+        Margin="0,8,0,0">
+
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasSelectedOrder}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+
+
+            <StackPanel>
+
+                <TextBlock Text="Детали заказа"
+                   FontSize="18"
+                   FontWeight="SemiBold"
+                   Foreground="{StaticResource OrangeText}"
+                   Margin="0,0,0,12"/>
+
+                <TextBlock Text="{Binding SelectedOrder.OrderType}"/>
+                <TextBlock Margin="0,4,0,0">
+    <Run Text="Адрес доставки: "/>
+    <Run Text="{Binding SelectedOrder.DeliveryAddress.Address}"/>
+                </TextBlock>
+
+                <TextBlock Margin="0,4,0,0">
+            <Run Text="Время доставки: "/>
+            <Run Text="{Binding SelectedOrder.DeliveryEta}"/>
+                </TextBlock>
+
+                <TextBlock Margin="0,8,0,8" TextWrapping="Wrap">
+            <Run Text="Комментарий: "/>
+            <Run Text="{Binding SelectedOrder.SpecialRequests}"/>
+                </TextBlock>
+
+                <TextBlock Text="Состав заказа"
+                   FontWeight="SemiBold"
+                   Foreground="{StaticResource OrangeText}"
+                   Margin="0,8,0,8"/>
+
+                <ItemsControl ItemsSource="{Binding SelectedOrderItems}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,4,0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="{Binding Dish.Name}"/>
+
+                                <TextBlock Grid.Column="1"
+                                   Margin="12,0,12,0"
+                                   Text="{Binding Quantity, StringFormat='x{0}'}"/>
+
+                                <TextBlock Grid.Column="2">
+                            <Run Text="{Binding Total}"/>
+                            <Run Text=" ₽"/>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </StackPanel>
+        </Border>
+
+
+    </Grid>
+</UserControl>

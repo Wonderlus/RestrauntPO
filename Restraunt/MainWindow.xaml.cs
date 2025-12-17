@@ -71,5 +71,21 @@ namespace Restraunt
             Navigate(new DeliveryAddressesPage());
             SidebarHost.SetEmptySidebar();
         }
+
+        public void NavigateToOrders()
+        {
+            var vm = new OrdersViewModel();
+
+            MainContentHost.Content = new OrdersPage
+            {
+                DataContext = vm
+            };
+
+            SidebarHost.Content = new OrdersSidebar
+            {
+                DataContext = vm
+            };
+        }
+
     }
 }

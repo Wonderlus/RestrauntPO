@@ -53,6 +53,7 @@
 
                 <Button Style="{StaticResource SidebarItemButton}"
         Content="Заказы"
+                        Click="Orders_Click"
         />
 
                 <Button Style="{StaticResource SidebarItemButton}"
@@ -63,7 +64,6 @@
 
                 <Button Content="Адреса"
         Style="{StaticResource SidebarItemButton}"
-        Margin="8,0,0,0"
         Click="Addresses_Click"/>
             </StackPanel>
 

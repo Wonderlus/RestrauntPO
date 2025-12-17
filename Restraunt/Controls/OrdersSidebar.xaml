@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="Restraunt.Controls.OrdersSidebar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Border Padding="12">
+
+        <StackPanel>
+
+            <!-- TITLE -->
+            <TextBlock Text="Фильтры"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource OrangeText}"
+                       Margin="0,0,0,16"/>
+
+            <!-- STATUS -->
+            <TextBlock Text="Статус"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,8"/>
+
+            <ComboBox ItemsSource="{Binding Statuses}"
+                      SelectedItem="{Binding SelectedStatus}"
+                      Margin="0,0,0,16"/>
+
+            <!-- TYPE -->
+            <TextBlock Text="Тип заказа"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,8"/>
+
+            <ComboBox ItemsSource="{Binding OrderTypes}"
+                      SelectedItem="{Binding SelectedOrderType}"
+                      Margin="0,0,0,16"/>
+
+            <Separator Margin="0,16"/>
+
+            <!-- ACTIONS -->
+            <Button Content="Сбросить"
+                    Style="{StaticResource PrimaryButton}"
+                    Height="36"
+                    Click="Reset_Click"/>
+
+        </StackPanel>
+    </Border>
+</UserControl>

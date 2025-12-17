@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\App.xaml
-152052436173
+16748883226
 
-2617826988
+28251526161
 216-633699742
-Controls\BasketPage.xaml;Controls\CustomersPage.xaml;Controls\DeliveryAddressesPage.xaml;Controls\Footer.xaml;Controls\MainContent.xaml;Controls\MenuSidebar.xaml;Controls\OrderSidebar.xaml;Controls\Sidebar.xaml;Controls\TopNavBar.xaml;Controls\UsersPage.xaml;MainWindow.xaml;Windows\CheckoutWindow.xaml;Windows\DishEditWindow.xaml;Windows\LoginWindow.xaml;Windows\RegisterWindow.xaml;
+Controls\BasketPage.xaml;Controls\CustomersPage.xaml;Controls\DeliveryAddressesPage.xaml;Controls\Footer.xaml;Controls\MainContent.xaml;Controls\MenuSidebar.xaml;Controls\OrdersPage.xaml;Controls\OrdersSidebar.xaml;Controls\Sidebar.xaml;Controls\TopNavBar.xaml;Controls\UsersPage.xaml;MainWindow.xaml;Windows\CheckoutWindow.xaml;Windows\DishEditWindow.xaml;Windows\LoginWindow.xaml;Windows\RegisterWindow.xaml;
 
 False
 
