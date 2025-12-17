@@ -2,30 +2,36 @@
 using DAL.Entities;
 using Restraunt.Services;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Restraunt.ViewModels
 {
     public class OrdersViewModel : ViewModelBase
     {
+        private readonly OrderService _orderService = new();
 
+        // ===== РОЛЬ =====
+        public bool IsAdmin => Session.CurrentUser?.IsAdmin == true;
+
+        // ===== ФИЛЬТРЫ =====
         public List<string> Statuses { get; } = new()
-{
-    "Все",
-    "принят",
-    "готовится",
-    "готов",
-    "доставляется",
-    "выполнен",
-    "отменен"
-};
+        {
+            "Все",
+            "принят",
+            "готовится",
+            "готов",
+            "доставляется",
+            "выполнен",
+            "отменен"
+        };
 
         public List<string> OrderTypes { get; } = new()
-{
-    "Все",
-    "на месте",
-    "самовывоз",
-    "доставка"
-};
+        {
+            "Все",
+            "на месте",
+            "самовывоз",
+            "доставка"
+        };
 
         private string _selectedStatus = "Все";
         public string SelectedStatus
@@ -51,10 +57,9 @@ namespace Restraunt.ViewModels
             }
         }
 
+        // ===== ДАННЫЕ =====
         private List<OrderEntity> _allOrders = new();
 
-        private readonly OrderService _orderService = new();
-        public bool HasSelectedOrder => SelectedOrder != null;
         private List<OrderEntity> _orders = new();
         public List<OrderEntity> Orders
         {
@@ -65,7 +70,6 @@ namespace Restraunt.ViewModels
                 OnPropertyChanged();
             }
         }
-        public List<OrderItemEntity> SelectedOrderItems { get; private set; } = new();
 
         private OrderEntity? _selectedOrder;
         public OrderEntity? SelectedOrder
@@ -76,31 +80,62 @@ namespace Restraunt.ViewModels
                 _selectedOrder = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasSelectedOrder));
+                OnPropertyChanged(nameof(CanCancel));
+                OnPropertyChanged(nameof(CanEdit));
                 LoadOrderItems();
             }
         }
 
+        public bool HasSelectedOrder => SelectedOrder != null;
+
+        public List<OrderItemEntity> SelectedOrderItems { get; private set; } = new();
+
+        // ===== ПРАВА НА ДЕЙСТВИЯ =====
+        public bool CanCancel =>
+            SelectedOrder != null &&
+            (IsAdmin ||
+             (SelectedOrder.CustomerId == Session.CurrentUser!.Id &&
+              (SelectedOrder.Status == "принят" || SelectedOrder.Status == "готовится")));
+
+        public bool CanEdit =>
+            SelectedOrder != null &&
+            (IsAdmin ||
+             (SelectedOrder.CustomerId == Session.CurrentUser!.Id &&
+              SelectedOrder.Status == "принят"));
+
+        // ===== КОНСТРУКТОР =====
         public OrdersViewModel()
         {
             LoadOrders();
         }
 
-        private void LoadOrders()
+        // ===== ЗАГРУЗКА =====
+        public void LoadOrders()
         {
             if (Session.CurrentUser == null) return;
 
-            _allOrders = _orderService.GetOrdersByCustomer(Session.CurrentUser.Id);
+            _allOrders = _orderService.GetOrders(
+                Session.CurrentUser.Id,
+                IsAdmin);
+
             ApplyFilters();
         }
 
-
         private void LoadOrderItems()
         {
-            if (SelectedOrder == null) return;
-            SelectedOrderItems = _orderService.GetOrderItems(SelectedOrder.Id);
+            if (SelectedOrder == null)
+            {
+                SelectedOrderItems = new();
+            }
+            else
+            {
+                SelectedOrderItems = _orderService.GetOrderItems(SelectedOrder.Id);
+            }
+
             OnPropertyChanged(nameof(SelectedOrderItems));
         }
 
+        // ===== ФИЛЬТРАЦИЯ =====
         private void ApplyFilters()
         {
             IEnumerable<OrderEntity> query = _allOrders;
@@ -116,5 +151,24 @@ namespace Restraunt.ViewModels
                 .ToList();
         }
 
+        // ===== ДЕЙСТВИЯ =====
+        public void CancelSelectedOrder()
+        {
+            if (SelectedOrder == null || Session.CurrentUser == null)
+                return;
+
+            _orderService.CancelOrder(
+                SelectedOrder.Id,
+                Session.CurrentUser.Id,
+                IsAdmin);
+
+            LoadOrders();
+            SelectedOrder = null;
+        }
+
+        public void Reload()
+        {
+            LoadOrders();
+        }
     }
 }

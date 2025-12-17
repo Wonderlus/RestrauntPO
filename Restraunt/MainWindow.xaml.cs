@@ -24,8 +24,8 @@ namespace Restraunt
         private MainContent? _menuPage;
         public MainWindow()
         {
-            DataContext = _appVm;
             InitializeComponent();
+            DataContext = _appVm;
 
             // Страница по умолчанию
             NavigateToMenu();
@@ -91,6 +91,19 @@ namespace Restraunt
                 DataContext = vm
             };
         }
+
+        public void NavigateToProfile()
+        {
+            var vm = new ProfileViewModel();
+
+            MainContentHost.Content = new ProfilePage
+            {
+                DataContext = vm
+            };
+
+            SidebarHost.SetEmptySidebar();
+        }
+
 
     }
 }

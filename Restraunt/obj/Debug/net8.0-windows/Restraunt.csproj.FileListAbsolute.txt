@@ -141,3 +141,7 @@ C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\OrdersPage.g.cs
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\OrdersSidebar.g.cs
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\OrdersSidebar.baml
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Windows\EditOrderWindow.g.cs
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Windows\EditOrderWindow.baml
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\ProfilePage.baml
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\ProfilePage.g.cs

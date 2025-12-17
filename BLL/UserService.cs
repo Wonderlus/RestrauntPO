@@ -28,7 +28,7 @@ namespace BLL
 
             user.IsAdmin = isAdmin;
             context.SaveChanges();
-        }
+        }   
 
         public void Delete(int userId)
         {
@@ -40,5 +40,25 @@ namespace BLL
             context.Customers.Remove(user);
             context.SaveChanges();
         }
+
+        public void UpdateUser(
+    int userId,
+    string fullName,
+    string phone,
+    string email)
+        {
+            using var context = new RestrauntContext();
+
+            var user = context.Customers.FirstOrDefault(c => c.Id == userId);
+            if (user == null)
+                throw new Exception("Пользователь не найден");
+
+            user.FullName = fullName;
+            user.Phone = phone;
+            user.Email = email;
+
+            context.SaveChanges();
+        }
+
     }
 }

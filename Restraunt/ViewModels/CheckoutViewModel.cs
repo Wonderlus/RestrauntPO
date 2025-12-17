@@ -102,11 +102,7 @@ namespace Restraunt.ViewModels
 
                 eta = parsed;
             }
-            MessageBox.Show(
-    SelectedAddress == null
-        ? "SelectedAddress = NULL"
-        : $"SelectedAddress.Id = {SelectedAddress.Id}"
-);
+            
             _orderService.CreateOrder(
                 Session.CurrentUser.Id,
                 SelectedOrderType,

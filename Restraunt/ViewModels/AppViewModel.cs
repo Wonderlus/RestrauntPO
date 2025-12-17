@@ -1,22 +1,27 @@
 ﻿using Restraunt.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Restraunt.ViewModels;
 
-namespace Restraunt.ViewModels
+public class AppViewModel : ViewModelBase
 {
-    public class AppViewModel : ViewModelBase
+    public AppViewModel()
     {
-        public bool IsAdmin => Session.CurrentUser?.IsAdmin == true;
+        Session.CurrentUserChanged += RefreshUser;
+    }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+    public string UserName => Session.CurrentUser?.FullName ?? "";
+    public string UserPhone => Session.CurrentUser?.Phone ?? "";
+    public string UserEmail => Session.CurrentUser?.Email ?? "";
 
-        public void Refresh()
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsAdmin)));
-        }
+    public bool IsAuthenticated => Session.CurrentUser != null;
+    public bool IsAdmin => Session.CurrentUser?.IsAdmin == true;
+
+    public void RefreshUser()
+    {
+        OnPropertyChanged(nameof(UserName));
+        OnPropertyChanged(nameof(UserPhone));
+        OnPropertyChanged(nameof(UserEmail));
+        OnPropertyChanged(nameof(IsAuthenticated));
+        OnPropertyChanged(nameof(IsAdmin));
     }
 }
+

@@ -57,6 +57,13 @@ namespace Restraunt.Controls
         {
             Main?.NavigateToOrders();
         }
+
+
+        private void Profile_Click(object sender, RoutedEventArgs e)
+        {
+            Main?.NavigateToProfile();
+        }
+
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             // 1️⃣ Очищаем сессию

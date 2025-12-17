@@ -90,5 +90,98 @@ namespace BLL
                 .Where(oi => oi.OrderId == orderId)
                 .ToList();
         }
+
+
+        public void CancelOrder(int orderId, int currentUserId, bool isAdmin)
+        {
+            using var context = new RestrauntContext();
+
+            var order = context.Orders.FirstOrDefault(o => o.Id == orderId);
+            if (order == null)
+                throw new Exception("Заказ не найден");
+
+            // защита
+            if (!isAdmin && order.CustomerId != currentUserId)
+                throw new Exception("Нет доступа к заказу");
+
+            if (!isAdmin && order.Status != "принят" && order.Status != "готовится")
+                throw new Exception("Этот заказ нельзя отменить");
+
+            order.Status = "отменен";
+            context.SaveChanges();
+        }
+
+        public void UpdateOrder(
+    int orderId,
+    int currentUserId,
+    bool isAdmin,
+    string orderType,
+    int? deliveryAddressId,
+    TimeSpan? deliveryEta,
+    string? specialRequests)
+        {
+            using var context = new RestrauntContext();
+
+            var order = context.Orders.FirstOrDefault(o => o.Id == orderId);
+            if (order == null)
+                throw new Exception("Заказ не найден");
+
+            // доступ
+            if (!isAdmin && order.CustomerId != currentUserId)
+                throw new Exception("Нет доступа к заказу");
+
+            // редактировать можно только "принят" (для пользователя), админ — всегда
+            if (!isAdmin && order.Status != "принят")
+                throw new Exception("Редактировать можно только принятый заказ");
+
+            // если не доставка — адрес/время чистим
+            order.OrderType = orderType;
+
+            if (orderType != "доставка")
+            {
+                order.DeliveryAddressId = null;
+                order.DeliveryEta = null;
+            }
+            else
+            {
+                order.DeliveryAddressId = deliveryAddressId;
+                order.DeliveryEta = deliveryEta;
+            }
+
+            order.SpecialRequests = specialRequests;
+            context.SaveChanges();
+        }
+
+        public void SetOrderStatus(int orderId, string newStatus, int currentUserId, bool isAdmin)
+        {
+            if (!isAdmin)
+                throw new Exception("Недостаточно прав");
+
+            using var context = new RestrauntContext();
+
+            var order = context.Orders.FirstOrDefault(o => o.Id == orderId);
+            if (order == null)
+                throw new Exception("Заказ не найден");
+
+            order.Status = newStatus;
+            context.SaveChanges();
+        }
+
+        public List<OrderEntity> GetOrders(int currentUserId, bool isAdmin)
+        {
+            using var context = new RestrauntContext();
+
+            var query = context.Orders
+                .Include(o => o.DeliveryAddress)
+                .Include(o => o.Customer)
+                .OrderByDescending(o => o.OrderDate)
+                .AsQueryable();
+
+            if (!isAdmin)
+                query = query.Where(o => o.CustomerId == currentUserId);
+
+            return query.ToList();
+        }
+
     }
 }

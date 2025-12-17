@@ -1,17 +1,27 @@
 ﻿using DAL.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restraunt.Services
 {
     public static class Session
     {
-        public static CustomerEntity? CurrentUser { get; set; }
+        private static CustomerEntity? _currentUser;
+        public static CustomerEntity? CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                _currentUser = value;
+                CurrentUserChanged?.Invoke();
+            }
+        }
 
-        public static bool IsAdmin =>
-            CurrentUser != null && CurrentUser.IsAdmin;
+        public static event Action? CurrentUserChanged;
+
+        // если меняем поля у текущего пользователя (FullName/Phone/Email), вызываем это:
+        public static void NotifyUserUpdated()
+        {
+            CurrentUserChanged?.Invoke();
+        }
     }
 }

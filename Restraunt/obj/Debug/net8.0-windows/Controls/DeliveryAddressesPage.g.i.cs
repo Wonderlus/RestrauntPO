@@ -68,7 +68,7 @@ namespace Restraunt.Controls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Restraunt;component/controls/deliveryaddressespage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Restraunt;V1.0.0.0;component/controls/deliveryaddressespage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Controls\DeliveryAddressesPage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

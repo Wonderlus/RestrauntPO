@@ -1,0 +1,89 @@
+﻿<Window x:Class="Restraunt.Windows.EditOrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:conv="clr-namespace:Restraunt.Converters"
+        Title="Редактирование заказа"
+        Width="420"
+        Height="520"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource OrangeBg}">
+
+    <Window.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+    </Window.Resources>
+
+    <Border Padding="16">
+        <Border Background="{StaticResource CardBg}"
+                BorderBrush="{StaticResource OrangeBorder}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="16">
+
+            <StackPanel>
+
+                <TextBlock Text="Редактирование заказа"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource OrangeText}"
+                           Margin="0,0,0,12"/>
+
+                <TextBlock Text="Тип заказа"
+           FontWeight="SemiBold"/>
+
+                <ComboBox ItemsSource="{Binding OrderTypes}"
+          SelectedItem="{Binding SelectedOrderType}"
+          Margin="0,4,0,12"
+          IsEnabled="{Binding CanEditType}"/>
+
+                <!-- Админ: статус -->
+                <StackPanel Margin="0,0,0,12"
+                            Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Text="Статус" FontWeight="SemiBold"/>
+                    <ComboBox ItemsSource="{Binding Statuses}"
+                              SelectedItem="{Binding SelectedStatus}"
+                              Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <!-- Доставка: адрес -->
+                <StackPanel Margin="0,0,0,12"
+                            Visibility="{Binding IsDelivery, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Text="Адрес доставки" FontWeight="SemiBold"/>
+                    <ComboBox ItemsSource="{Binding DeliveryAddresses}"
+                              SelectedItem="{Binding SelectedAddress}"
+                              DisplayMemberPath="Address"
+                              Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <!-- Доставка: время -->
+                <StackPanel Margin="0,0,0,12"
+                            Visibility="{Binding IsDelivery, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Text="Время доставки (HH:mm)" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding DeliveryTimeText}"
+                             Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <!-- Комментарий -->
+                <TextBlock Text="Комментарий" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding SpecialRequests}"
+                         Margin="0,4,0,12"
+                         Height="90"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Отмена"
+                            Margin="0,0,8,0"
+                            Style="{StaticResource PrimaryButton}"
+                            Click="Cancel_Click"
+                            Height="36"/>
+
+                    <Button Content="Сохранить"
+                            Style="{StaticResource PrimaryButton}"
+                            Click="Save_Click"
+                            Height="36"/>
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
+    </Border>
+</Window>

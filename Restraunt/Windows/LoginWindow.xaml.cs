@@ -22,14 +22,22 @@ namespace Restraunt.Windows
 
             if (user == null)
             {
-                MessageBox.Show("Invalid phone or password");
+                MessageBox.Show("Неверный телефон или пароль");
                 return;
             }
-            Session.CurrentUser = user;
-            // TODO: сохранить текущего пользователя (Session)
-            var main = new MainWindow();
-            main.Show();
 
+            Session.CurrentUser = user;
+
+            // обновляем AppViewModel
+            if (Application.Current.MainWindow?.DataContext is AppViewModel appVm)
+                appVm.RefreshUser();
+
+            var main = new MainWindow();
+
+            // ВОТ ЭТО ВАЖНО
+            Application.Current.MainWindow = main;
+
+            main.Show();
             Close();
         }
 

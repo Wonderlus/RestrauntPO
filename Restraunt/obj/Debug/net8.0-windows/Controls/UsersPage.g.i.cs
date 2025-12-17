@@ -52,7 +52,7 @@ namespace Restraunt.Controls {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Restraunt;component/controls/userspage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Restraunt;V1.0.0.0;component/controls/userspage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Controls\UsersPage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
