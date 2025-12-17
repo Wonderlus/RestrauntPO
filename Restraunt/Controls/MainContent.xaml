@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Restraunt.Controls"
              xmlns:models="clr-namespace:Restraunt.Models;assembly=Models"
              xmlns:conv="clr-namespace:Restraunt.Converters"
+             xmlns:services="clr-namespace:Restraunt.Services"
  
                 mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -22,8 +23,7 @@
         <!-- Header row -->
         <DockPanel Grid.Row="0" Margin="0,0,0,12">
             <StackPanel DockPanel.Dock="Left">
-                <TextBlock Text="Dishes" FontSize="22" FontWeight="Bold" Foreground="{StaticResource OrangeText}"/>
-                <TextBlock Text="Manage your restaurant dishes" Foreground="#FFB07340" FontSize="12"/>
+                <TextBlock Text="Блюда" FontSize="22" FontWeight="Bold" Foreground="{StaticResource OrangeText}"/>
             </StackPanel>
             <Button DockPanel.Dock="Right"
         Style="{StaticResource PrimaryButton}"
@@ -33,6 +33,7 @@
         VerticalAlignment="Center"
         Margin="0,0,0,0"
         MinWidth="140"
+        Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibility}}"
         Height="40"/>
 
         </DockPanel>
@@ -48,20 +49,27 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:DishModel}">
                         <Border Width="250"
+            MinHeight="380"
             Margin="0,0,16,16"
             Background="{StaticResource CardBg}"
             BorderBrush="{StaticResource OrangeBorder}"
             BorderThickness="1"
-            CornerRadius="12"
-            Padding="0">
+            CornerRadius="12">
 
-                            <StackPanel>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <!-- Картинка -->
+                                    <RowDefinition Height="140"/>
+                                    <!-- Контент (растягивается) -->
+                                    <RowDefinition Height="*"/>
+                                    <!-- Нижняя панель (всегда снизу) -->
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
-                                <!-- Картинка -->
-                                <Grid Height="140">
+                                <!-- ===== КАРТИНКА ===== -->
+                                <Grid Grid.Row="0">
                                     <Image Source="{Binding ImageUrl, Converter={StaticResource ImageConverter}}"
-       Stretch="UniformToFill"/>
-
+                       Stretch="UniformToFill"/>
 
                                     <!-- Бейджи -->
                                     <StackPanel Orientation="Horizontal"
@@ -93,48 +101,87 @@
                                     </StackPanel>
                                 </Grid>
 
-                                <!-- Контент -->
-                                <Border Padding="12">
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding Name}"
+                                <!-- ===== КОНТЕНТ ===== -->
+                                <StackPanel Grid.Row="1" Margin="12,12,12,0">
+                                    <TextBlock Text="{Binding Name}"
                            FontWeight="SemiBold"
                            FontSize="15"
                            Foreground="{StaticResource OrangeText}"/>
 
-                                        <TextBlock Text="{Binding CategoryName}"
+                                    <TextBlock Text="{Binding CategoryName}"
                            Foreground="#FFB07340"
                            FontSize="11"
                            Margin="0,2,0,6"/>
 
-                                        <TextBlock Text="{Binding Description}"
+                                    <TextBlock Text="{Binding Description}"
                            TextWrapping="Wrap"
                            FontSize="11"
                            Margin="0,0,0,6"/>
 
-                                        <TextBlock Text="{Binding Price, StringFormat='{}{0} ₽'}"
+                                    <TextBlock Text="{Binding Price, StringFormat='{}{0} ₽'}"
                            FontWeight="Bold"/>
+                                </StackPanel>
 
-                                        <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            Margin="0,8,0,0">
+                                <!-- ===== НИЖНЯЯ ПАНЕЛЬ (ВСЕГДА ВНИЗУ) ===== -->
+                                <Border Grid.Row="2"
+        BorderBrush="{StaticResource OrangeBorder}"
+        BorderThickness="0,1,0,0"
+        Padding="12"
+        Margin="0,10,0,0">
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <!-- текст -->
+                                            <ColumnDefinition Width="*"/>
+                                            <!-- кнопка + -->
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- админ-кнопки -->
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- ТЕКСТ: слева -->
+                                        <TextBlock Grid.Column="0"
+                   Text="Добавить в корзину"
+                   Foreground="#FFB07340"
+                   FontSize="12"
+                   VerticalAlignment="Center"/>
+
+                                        <!-- КНОПКА + : справа от текста -->
+                                        <Button Grid.Column="1"
+                Style="{StaticResource IconButton}"
+                Content="+"
+                Tag="{Binding}"
+                Click="AddToBasket_Click"
+                />
+
+                                        <!-- АДМИНСКИЕ КНОПКИ: максимально справа -->
+                                        <StackPanel Grid.Column="2"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    Visibility="{Binding DataContext.IsAdmin,
+                                         RelativeSource={RelativeSource AncestorType=UserControl},
+                                         Converter={StaticResource BoolToVisibility}}">
                                             <Button Style="{StaticResource IconButton}"
-                            Content="✏"
-                            Margin="0,0,6,0"
-                            Tag="{Binding}"
-                            Click="EditDish_Click"/>
+                    Content="✏"
+                    Margin="0,0,6,0"
+                    Tag="{Binding}"
+                    Click="EditDish_Click"/>
                                             <Button Style="{StaticResource IconButton}"
-                            Content="🗑"
-                            Tag="{Binding}"
-                            Click="DeleteDish_Click"/>
+                    Content="🗑"
+                    Tag="{Binding}"
+                    Click="DeleteDish_Click"/>
                                         </StackPanel>
-                                    </StackPanel>
-                                </Border>
 
-                            </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </Grid>
                         </Border>
                     </DataTemplate>
+
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
     </Grid>
 </UserControl>
+
+

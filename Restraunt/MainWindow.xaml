@@ -9,35 +9,27 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Верхняя панель -->
             <RowDefinition Height="*"/>
-            <!-- Основной контент -->
-            <RowDefinition Height="Auto"/>
-            <!-- Футер -->
         </Grid.RowDefinitions>
 
-        <!-- Верхняя панель -->
+        <!-- Top navigation -->
         <controls:TopNavBar Grid.Row="0"/>
 
-        <!-- Основной контент -->
+        <!-- Main area -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="230"/>
-                <!-- Sidebar -->
                 <ColumnDefinition Width="*"/>
-                <!-- Контент -->
             </Grid.ColumnDefinitions>
 
-            <!-- Боковое меню -->
-            <controls:Sidebar Grid.Column="0"/>
+            <!-- Sidebar -->
+            <controls:Sidebar x:Name="SidebarHost" Grid.Column="0"/>
 
-            <!-- Контент, который будет меняться -->
-            <Border Grid.Column="1" Padding="16" Background="Transparent">
-                <controls:MainContent/>
-            </Border>
+            <!-- Content -->
+            <ContentControl x:Name="MainContentHost"
+                        Grid.Column="1"
+                        Margin="16"/>
         </Grid>
-
-        <!-- Футер -->
-        <controls:Footer Grid.Row="2"/>
     </Grid>
+
 </Window>

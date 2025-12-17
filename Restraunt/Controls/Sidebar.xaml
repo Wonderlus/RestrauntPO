@@ -2,26 +2,18 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Restraunt.Controls"
-             mc:Ignorable="d" 
-             Background="#FFFFF4E5"
-             MinWidth="220">
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             MinWidth="220"
+             Background="#FFFFF4E5">
+
     <Border Background="#FFFFF4E5"
             BorderBrush="{StaticResource OrangeBorder}"
             BorderThickness="0,0,1,0"
             Padding="16">
-        <StackPanel>
-            <TextBlock Text="Menu" FontWeight="Bold" Foreground="{StaticResource OrangeText}" Margin="0,0,0,10"/>
-            <ItemsControl x:Name="MenuList">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Content="{Binding}" 
-                                Style="{StaticResource SidebarItemButton}"
-                                Tag="{Binding}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+
+        <!-- Контент сайдбара будет подменяться -->
+        <ContentControl x:Name="SidebarContent"/>
+
     </Border>
 </UserControl>

@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="Restraunt.Controls.BasketPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:Restraunt.Models;assembly=Models"
+             >
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="Корзина"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource OrangeText}"/>
+            <TextBlock Text="Ваши выбранные блюда"
+                       Foreground="#FFB07340"
+                       FontSize="12"/>
+        </StackPanel>
+
+        <!-- LIST -->
+        <ItemsControl Grid.Row="1"
+              ItemsSource="{Binding Items}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="{StaticResource OrangeBorder}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="12"
+                            Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}"
+                                           FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding Price, StringFormat='{}{0} ₽'}"
+                                           Foreground="#FFB07340"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                    <Button Style="{StaticResource IconButton}"
+        Content="−"
+        Command="{Binding DataContext.DecreaseCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+        CommandParameter="{Binding}"/>
+
+                                    <TextBlock Text="{Binding Quantity}"
+               Width="30"
+               TextAlignment="Center"
+               VerticalAlignment="Center"/>
+
+                                    <Button Style="{StaticResource IconButton}"
+        Content="+"
+        Command="{Binding DataContext.IncreaseCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+        CommandParameter="{Binding}"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Button Grid.Column="1"
+        Style="{StaticResource IconButton}"
+        Content="🗑"
+        Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+        CommandParameter="{Binding}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- FOOTER -->
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,16,0,0">
+            <TextBlock Text="{Binding TotalPrice, StringFormat='Total: {0} ₽'}"
+                       VerticalAlignment="Center"
+                       FontWeight="Bold"
+                       Margin="0,0,16,0"/>
+            <Button Content="Заказать"
+                    Style="{StaticResource PrimaryButton}"
+                    Height="40"
+                    Click="Checkout_Click"/>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

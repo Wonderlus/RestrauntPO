@@ -38,6 +38,7 @@ namespace DAL.Entities
 
 
         [Column("total")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public decimal Total { get; set; }
     }
 }

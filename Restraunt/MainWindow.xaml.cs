@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using Models;
+using Restraunt.Controls;
+using Restraunt.ViewModels;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,9 +19,57 @@ namespace Restraunt
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private readonly AppViewModel _appVm = new();
+        private MainContent? _menuPage;
         public MainWindow()
         {
+            DataContext = _appVm;
             InitializeComponent();
+
+            // Страница по умолчанию
+            NavigateToMenu();
+        }
+
+        public void Navigate(UserControl page)
+        {
+            MainContentHost.Content = page;
+        }
+
+        public void NavigateToMenu()
+        {
+            _menuPage = new MainContent();
+            MainContentHost.Content = _menuPage;
+            SidebarHost.SetMenuSidebar();
+        }
+        public void ApplyMenuFilters(MenuFilters? filters)
+        {
+            _menuPage?.ApplyFilters(filters);
+        }
+
+        //public void NavigateToOrders()
+        //{
+        //    Navigate(new OrdersPage());
+        //    SidebarHost.SetOrdersSidebar();
+        //}
+
+
+        public void NavigateToBasket()
+        {
+            MainContentHost.Content = new BasketPage();
+            SidebarHost.SetEmptySidebar();
+        }
+
+        public void NavigateToCustomers()
+        {
+            Navigate(new CustomersPage());
+            SidebarHost.SetEmptySidebar();
+        }
+
+        public void NavigateToAdresses()
+        {
+            Navigate(new DeliveryAddressesPage());
+            SidebarHost.SetEmptySidebar();
         }
     }
 }

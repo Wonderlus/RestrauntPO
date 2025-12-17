@@ -40,6 +40,8 @@ namespace BLL
         /// </summary>
         public void Add(DishModel model)
         {
+
+
             using var context = new RestrauntContext();
 
             var entity = new DishEntity

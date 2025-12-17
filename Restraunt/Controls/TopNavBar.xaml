@@ -1,31 +1,72 @@
 ﻿<UserControl x:Class="Restraunt.Controls.TopNavBar"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Restraunt.Controls"
-             mc:Ignorable="d" 
-            Height="60"
+             xmlns:conv="clr-namespace:Restraunt.Converters"
+             Height="60"
              Background="#FFFFF8F0">
-    <Border BorderBrush="{StaticResource OrangeBorder}" BorderThickness="0,0,0,1" Padding="16" Background="#FFFFF8F0">
+
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+    </UserControl.Resources>
+    <Border BorderBrush="{StaticResource OrangeBorder}"
+            BorderThickness="0,0,0,1"
+            Padding="16"
+            Background="#FFFFF8F0">
+
         <DockPanel LastChildFill="True">
-            <!-- Left: logo -->
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
+
+            <!-- LEFT: logo -->
+            <StackPanel Orientation="Horizontal"
+                        DockPanel.Dock="Left"
+                        VerticalAlignment="Center">
                 <TextBlock Text="🍽" FontSize="20" Margin="0,0,6,0"/>
-                <TextBlock Text="Savory" Foreground="{StaticResource OrangeText}" FontWeight="SemiBold" FontSize="16"/>
+                <TextBlock Text="Savory"
+                           Foreground="{StaticResource OrangeText}"
+                           FontWeight="SemiBold"
+                           FontSize="16"/>
             </StackPanel>
 
-            <!-- Center: links -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12,0,12,0">
-                <Button Style="{StaticResource SidebarItemButton}" Content="Home" Margin="4,0"/>
-                <Button Style="{StaticResource SidebarItemButton}" Content="Menu" Margin="4,0"/>
-                <Button Style="{StaticResource SidebarItemButton}" Content="Basket" Margin="4,0"/>
+            <!-- RIGHT: logout -->
+            <Button DockPanel.Dock="Right"
+                    Style="{StaticResource PrimaryButton}"
+                    Content="Logout"
+                    Click="Logout_Click"
+                    MinWidth="120"
+                    Height="20"
+                    Padding="18,8"
+                    FontSize="14"/>
+
+            <!-- CENTER: navigation -->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="12,0">
+
+                
+                <Button Style="{StaticResource SidebarItemButton}"
+        Content="Меню"
+        Click="Menu_Click"/>
+
+                <Button Style="{StaticResource SidebarItemButton}"
+                        Content="Корзина"
+                        Click="Basket_Click"/>
+
+                <Button Style="{StaticResource SidebarItemButton}"
+        Content="Заказы"
+        />
+
+                <Button Style="{StaticResource SidebarItemButton}"
+        Content="Клиенты"
+        Click="Customers_Click"
+        Visibility="{Binding IsAdmin,
+                     Converter={StaticResource BoolToVisibility}}"/>
+
+                <Button Content="Адреса"
+        Style="{StaticResource SidebarItemButton}"
+        Margin="8,0,0,0"
+        Click="Addresses_Click"/>
             </StackPanel>
 
-            <!-- Right: login -->
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
-                <Button Style="{StaticResource PrimaryButton}" Content="Log in"/>
-            </StackPanel>
         </DockPanel>
     </Border>
 </UserControl>

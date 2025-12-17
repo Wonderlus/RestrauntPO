@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Restraunt.ViewModels
 {
-    public class MenuViewModel
+    public class MenuViewModel : ViewModelBase
     {
         private readonly DishService _dishService;
 
