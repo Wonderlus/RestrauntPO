@@ -16,41 +16,53 @@ namespace BLL
     public class OrderService
     {
 
-        
-        public int CreateOrder(
-            int customerId,
-            string orderType,
-            int? deliveryAddressId,
-            TimeSpan? deliveryEta,          // ✅ TimeSpan?
-            string? specialRequests)
+
+        public decimal CreateOrder(
+    int customerId,
+    string orderType,
+    int? deliveryAddressId,
+    TimeSpan? deliveryEta,
+    string? specialRequests)
         {
             using var context = new RestrauntContext();
 
             var basketItems = context.Basket
-                .Include(b => b.Dish)
                 .Where(b => b.CustomerId == customerId)
+                .Include(b => b.Dish)
                 .ToList();
 
             if (!basketItems.Any())
                 throw new Exception("Корзина пуста");
 
-            decimal totalAmount = basketItems.Sum(b => b.Quantity * b.Dish.Price);
+            // 1. Считаем сумму БЕЗ скидки
+            decimal subtotal = basketItems.Sum(b => b.Dish.Price * b.Quantity);
 
+            // 2. Считаем коэффициент скидки
+            decimal discount = CalculateDiscount(subtotal);
+
+            // 3. Итоговая сумма
+            decimal totalWithDiscount = subtotal * discount;
+
+
+            // 3. Создаём заказ
             var order = new OrderEntity
             {
                 CustomerId = customerId,
                 OrderDate = DateTime.UtcNow,
-                OrderType = orderType,               // 'на месте' | 'самовывоз' | 'доставка'
+                OrderType = orderType,
                 Status = "принят",
-                DeliveryAddressId = orderType == "доставка" ? deliveryAddressId : null,
-                DeliveryEta = orderType == "доставка" ? deliveryEta : null,  // ✅
+                DeliveryAddressId = deliveryAddressId,
+                DeliveryEta = deliveryEta,
                 SpecialRequests = specialRequests,
-                TotalAmount = totalAmount
+                TotalAmount = totalWithDiscount,
+                Discount = discount
+                
             };
 
             context.Orders.Add(order);
             context.SaveChanges();
 
+            // 4. Переносим позиции корзины в order_items
             foreach (var item in basketItems)
             {
                 context.OrderItems.Add(new OrderItemEntity
@@ -59,15 +71,17 @@ namespace BLL
                     DishId = item.DishId,
                     Quantity = item.Quantity,
                     PriceAtOrder = item.Dish.Price
-                    // total computed — не трогаем
+                    // total НЕ трогаем — computed column
                 });
             }
 
+            // 5. Очищаем корзину
             context.Basket.RemoveRange(basketItems);
+            Console.WriteLine($"Discount before save: {discount}");
             context.SaveChanges();
-
-            return order.Id;
+            return discount;
         }
+
 
         public List<OrderEntity> GetOrdersByCustomer(int customerId)
         {
@@ -182,6 +196,41 @@ namespace BLL
 
             return query.ToList();
         }
+
+        
+
+        private decimal CalculateDiscount(decimal total)
+        {
+            // За каждую 1000 ₽ — 10%, максимум 40%
+            int thousands = (int)(total / 1000);
+            int discountPercent = thousands * 10;
+
+            if (discountPercent > 40)
+                discountPercent = 40;
+
+            decimal discountMultiplier = 1m - (discountPercent / 100m);
+
+            return discountMultiplier;
+        }
+
+
+        public List<OrderEntity> GetOrdersForPeriod(
+    DateTime dateFrom,
+    DateTime dateTo)
+        {
+            using var context = new RestrauntContext();
+
+            var fromUtc = DateTime.SpecifyKind(dateFrom, DateTimeKind.Utc);
+            var toUtc = DateTime.SpecifyKind(dateTo, DateTimeKind.Utc);
+
+            return context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.DeliveryAddress)
+                .Where(o => o.OrderDate >= fromUtc && o.OrderDate <= toUtc)
+                .OrderBy(o => o.OrderDate)
+                .ToList();
+        }
+
 
     }
 }

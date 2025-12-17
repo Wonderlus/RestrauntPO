@@ -40,5 +40,11 @@ namespace Restraunt.Controls
             if (win.ShowDialog() == true)
                 vm.Reload();
         }
+
+        private void ExportOrders_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is OrdersViewModel vm)
+                vm.ExportOrdersToExcel();
+        }
     }
 }

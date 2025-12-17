@@ -49,5 +49,7 @@ namespace DAL.Entities
 
         [Column("special_requests")]
         public string? SpecialRequests { get; set; }
+        [Column("discount")]
+        public decimal Discount { get; set; } // ← НОВОЕ ПОЛЕ
     }
 }

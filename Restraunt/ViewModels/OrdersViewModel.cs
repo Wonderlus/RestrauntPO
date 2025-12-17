@@ -13,6 +13,26 @@ namespace Restraunt.ViewModels
         // ===== РОЛЬ =====
         public bool IsAdmin => Session.CurrentUser?.IsAdmin == true;
 
+        // ===== ВЫЧИСЛЯЕМЫЕ СУММЫ =====
+
+        /// <summary>
+        /// Сумма заказа БЕЗ скидки
+        /// </summary>
+        public decimal Subtotal =>
+            SelectedOrderItems?.Sum(i => i.PriceAtOrder * i.Quantity) ?? 0;
+
+        /// <summary>
+        /// Процент скидки (0–40)
+        /// </summary>
+        public decimal DiscountPercent =>
+            SelectedOrder == null ? 0 : (1 - SelectedOrder.Discount) * 100;
+
+        /// <summary>
+        /// Сумма скидки в рублях
+        /// </summary>
+        public decimal DiscountAmount =>
+            SelectedOrder == null ? 0 : Subtotal * (1 - SelectedOrder.Discount);
+
         // ===== ФИЛЬТРЫ =====
         public List<string> Statuses { get; } = new()
         {
@@ -82,7 +102,13 @@ namespace Restraunt.ViewModels
                 OnPropertyChanged(nameof(HasSelectedOrder));
                 OnPropertyChanged(nameof(CanCancel));
                 OnPropertyChanged(nameof(CanEdit));
+
                 LoadOrderItems();
+
+                // обновляем расчёты ПОСЛЕ загрузки позиций
+                OnPropertyChanged(nameof(Subtotal));
+                OnPropertyChanged(nameof(DiscountPercent));
+                OnPropertyChanged(nameof(DiscountAmount));
             }
         }
 
@@ -102,6 +128,10 @@ namespace Restraunt.ViewModels
             (IsAdmin ||
              (SelectedOrder.CustomerId == Session.CurrentUser!.Id &&
               SelectedOrder.Status == "принят"));
+
+
+        public DateTime ExportFrom { get; set; } = DateTime.Today.AddDays(-7);
+        public DateTime ExportTo { get; set; } = DateTime.Today;
 
         // ===== КОНСТРУКТОР =====
         public OrdersViewModel()
@@ -165,6 +195,20 @@ namespace Restraunt.ViewModels
             LoadOrders();
             SelectedOrder = null;
         }
+
+        public void ExportOrdersToExcel()
+        {
+            if (!IsAdmin)
+                return;
+
+            var orders = _orderService.GetOrdersForPeriod(
+                ExportFrom,
+                ExportTo.AddDays(1).AddSeconds(-1)
+            );
+
+            ExcelExportService.ExportOrders(orders);
+        }
+
 
         public void Reload()
         {

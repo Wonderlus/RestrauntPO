@@ -103,7 +103,7 @@ namespace Restraunt.ViewModels
                 eta = parsed;
             }
             
-            _orderService.CreateOrder(
+            var discount = _orderService.CreateOrder(
                 Session.CurrentUser.Id,
                 SelectedOrderType,
                 SelectedAddress?.Id,
@@ -111,6 +111,17 @@ namespace Restraunt.ViewModels
                 SpecialRequests
             );
 
+
+
+            if (discount < 1)
+            {
+                MessageBox.Show(
+                    $"Вам применена скидка {(int)((1 - discount) * 100)}%",
+                    "Скидка",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
             OrderCreated?.Invoke();
         }
 

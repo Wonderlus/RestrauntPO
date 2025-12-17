@@ -2,79 +2,104 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:conv="clr-namespace:Restraunt.Converters">
-             
 
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
         <conv:ImagePathToPackUriConverter x:Key="ImageConverter"/>
     </UserControl.Resources>
+
     <Grid Margin="16">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-        <!-- СПИСОК ЗАКАЗОВ -->
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <!-- ВНЕШНЯЯ СЕТКА -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- экспорт -->
+            <RowDefinition Height="Auto"/>
+            <!-- заголовок -->
+            <RowDefinition Height="*"/>
+            <!-- список -->
+            <RowDefinition Height="Auto"/>
+            <!-- детали -->
+        </Grid.RowDefinitions>
 
-            <!-- Заголовок -->
-            <TextBlock Grid.Row="0"
-               Text="Мои заказы"
-               FontSize="22"
-               FontWeight="Bold"
-               Foreground="{StaticResource OrangeText}"
-               Margin="0,0,0,16"/>
+        <!-- ================== ЭКСПОРТ В EXCEL (ТОЛЬКО АДМИН) ================== -->
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Margin="0,0,0,12"
+                    Visibility="{Binding IsAdmin,
+                                 Converter={StaticResource BoolToVisibility}}">
 
-            <!-- Список заказов со скроллом -->
-            <ListBox Grid.Row="1"
-             ItemsSource="{Binding Orders}"
-             SelectedItem="{Binding SelectedOrder}"
-             HorizontalContentAlignment="Stretch"
-             ScrollViewer.VerticalScrollBarVisibility="Auto"
-             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <TextBlock Text="Период:"
+                       VerticalAlignment="Center"
+                       Margin="0,0,8,0"/>
 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="{StaticResource OrangeBorder}"
-                        BorderThickness="1"
-                        CornerRadius="10"
-                        Padding="12"
-                        Margin="0,0,0,0">
+            <DatePicker Width="130"
+                        SelectedDate="{Binding ExportFrom}"/>
 
-                            <StackPanel>
-                                <TextBlock FontWeight="SemiBold"
-                                   Text="{Binding OrderDate, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"/>
+            <TextBlock Text="—"
+                       VerticalAlignment="Center"
+                       Margin="6,0"/>
 
-                                <TextBlock Text="{Binding Status}"
-                                   Foreground="{StaticResource OrangeText}"/>
+            <DatePicker Width="130"
+                        SelectedDate="{Binding ExportTo}"/>
 
-                                <TextBlock FontWeight="SemiBold">
-                            <Run Text="Итого: "/>
-                            <Run Text="{Binding TotalAmount}"/>
-                            <Run Text=" ₽"/>
-                                </TextBlock>
-                            </StackPanel>
+            <Button Content="Выгрузить в Excel"
+                    Style="{StaticResource PrimaryButton}"
+                    Margin="12,0,0,0"
+                    Click="ExportOrders_Click"/>
+        </StackPanel>
 
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
+        <!-- ================== ЗАГОЛОВОК ================== -->
+        <TextBlock Grid.Row="1"
+                   Text="Мои заказы"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Foreground="{StaticResource OrangeText}"
+                   Margin="0,0,0,16"/>
 
-            </ListBox>
-        </Grid>
+        <!-- ================== СПИСОК ЗАКАЗОВ ================== -->
+        <ListBox Grid.Row="2"
+                 ItemsSource="{Binding Orders}"
+                 SelectedItem="{Binding SelectedOrder}"
+                 HorizontalContentAlignment="Stretch"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="{StaticResource OrangeBorder}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="12"
+                            Margin="0,0,0,8">
 
-        <!-- ДЕТАЛИ ЗАКАЗА -->
-        <Border Grid.Row="2"
-        Background="{StaticResource CardBg}"
-        BorderBrush="{StaticResource OrangeBorder}"
-        BorderThickness="1"
-        CornerRadius="12"
-        Padding="16"
-        Margin="0,8,0,0">
+                        <StackPanel>
+                            <TextBlock FontWeight="SemiBold"
+                                       Text="{Binding OrderDate,
+                                       StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"/>
+
+                            <TextBlock Text="{Binding Status}"
+                                       Foreground="{StaticResource OrangeText}"/>
+
+                            <TextBlock FontWeight="SemiBold">
+                                <Run Text="Итого: "/>
+                                <Run Text="{Binding TotalAmount}"/>
+                                <Run Text=" ₽"/>
+                            </TextBlock>
+                        </StackPanel>
+
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- ================== ДЕТАЛИ ЗАКАЗА ================== -->
+        <Border Grid.Row="3"
+                Background="{StaticResource CardBg}"
+                BorderBrush="{StaticResource OrangeBorder}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="16"
+                Margin="0,8,0,0">
 
             <Border.Style>
                 <Style TargetType="Border">
@@ -87,97 +112,114 @@
                 </Style>
             </Border.Style>
 
-
-
             <StackPanel>
 
+                <!-- Заголовок + кнопки -->
                 <Grid Margin="0,0,0,12">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Заголовок -->
-                    <TextBlock Grid.Column="0"
-               Text="Детали заказа"
-               FontSize="18"
-               FontWeight="SemiBold"
-               Foreground="{StaticResource OrangeText}"/>
+                    <TextBlock Text="Детали заказа"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource OrangeText}"/>
 
-                    <!-- Кнопки действий -->
                     <StackPanel Grid.Column="1"
-                Orientation="Horizontal"
-                VerticalAlignment="Center">
+                                Orientation="Horizontal">
 
-                        <!-- РЕДАКТИРОВАТЬ -->
                         <Button Content="✏"
-                ToolTip="Редактировать заказ"
-                Style="{StaticResource IconButton}"
-                Margin="0,0,8,0"
-                Visibility="{Binding CanEdit,
-                             Converter={StaticResource BoolToVisibility}}"
-                Click="EditOrder_Click"/>
+                                ToolTip="Редактировать заказ"
+                                Style="{StaticResource IconButton}"
+                                Margin="0,0,8,0"
+                                Visibility="{Binding CanEdit,
+                                             Converter={StaticResource BoolToVisibility}}"
+                                Click="EditOrder_Click"/>
 
-                        <!-- ОТМЕНИТЬ -->
                         <Button Content="🗑"
-                ToolTip="Отменить заказ"
-                Style="{StaticResource IconButton}"
-                Visibility="{Binding CanCancel,
-                             Converter={StaticResource BoolToVisibility}}"
-                Click="CancelOrder_Click"/>
+                                ToolTip="Отменить заказ"
+                                Style="{StaticResource IconButton}"
+                                Visibility="{Binding CanCancel,
+                                             Converter={StaticResource BoolToVisibility}}"
+                                Click="CancelOrder_Click"/>
                     </StackPanel>
                 </Grid>
 
-
+                <!-- Информация -->
                 <TextBlock Text="{Binding SelectedOrder.OrderType}"/>
+
                 <TextBlock Margin="0,4,0,0">
-    <Run Text="Адрес доставки: "/>
-    <Run Text="{Binding SelectedOrder.DeliveryAddress.Address}"/>
+                    <Run Text="Адрес доставки: "/>
+                    <Run Text="{Binding SelectedOrder.DeliveryAddress.Address}"/>
                 </TextBlock>
 
                 <TextBlock Margin="0,4,0,0">
-            <Run Text="Время доставки: "/>
-            <Run Text="{Binding SelectedOrder.DeliveryEta}"/>
+                    <Run Text="Время доставки: "/>
+                    <Run Text="{Binding SelectedOrder.DeliveryEta}"/>
                 </TextBlock>
 
                 <TextBlock Margin="0,8,0,8" TextWrapping="Wrap">
-            <Run Text="Комментарий: "/>
-            <Run Text="{Binding SelectedOrder.SpecialRequests}"/>
+                    <Run Text="Комментарий: "/>
+                    <Run Text="{Binding SelectedOrder.SpecialRequests}"/>
                 </TextBlock>
 
+                <!-- Состав -->
                 <TextBlock Text="Состав заказа"
-                   FontWeight="SemiBold"
-                   Foreground="{StaticResource OrangeText}"
-                   Margin="0,8,0,8"/>
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource OrangeText}"
+                           Margin="0,8,0,8"/>
 
                 <ItemsControl ItemsSource="{Binding SelectedOrderItems}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,4,0,4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0" Text="{Binding Dish.Name}"/>
-
+                                <TextBlock Text="{Binding Dish.Name}"/>
                                 <TextBlock Grid.Column="1"
-                                   Margin="12,0,12,0"
-                                   Text="{Binding Quantity, StringFormat='x{0}'}"/>
-
+                                           Margin="12,0"
+                                           Text="{Binding Quantity,
+                                           StringFormat='x{0}'}"/>
                                 <TextBlock Grid.Column="2">
-                            <Run Text="{Binding Total}"/>
-                            <Run Text=" ₽"/>
+                                    <Run Text="{Binding Total}"/>
+                                    <Run Text=" ₽"/>
                                 </TextBlock>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
+                <Separator Margin="0,12"/>
+
+                <!-- Итоги -->
+                <StackPanel HorizontalAlignment="Right">
+                    <TextBlock>
+                        <Run Text="Сумма без скидки: "/>
+                        <Run Text="{Binding Subtotal, Mode=OneWay}"/>
+                        <Run Text=" ₽"/>
+                    </TextBlock>
+
+                    <TextBlock>
+                        <Run Text="Скидка: "/>
+                        <Run Text="{Binding DiscountPercent, Mode=OneWay}"/>
+                        <Run Text="%"/>
+                    </TextBlock>
+
+                    <TextBlock FontWeight="SemiBold"
+                               Foreground="{StaticResource OrangeText}">
+                        <Run Text="Итого к оплате: "/>
+                        <Run Text="{Binding SelectedOrder.TotalAmount, Mode=OneWay}"/>
+                        <Run Text=" ₽"/>
+                    </TextBlock>
+                </StackPanel>
+
             </StackPanel>
         </Border>
-
 
     </Grid>
 </UserControl>

@@ -145,3 +145,11 @@ C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Windows\EditOrderWindow.baml
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\ProfilePage.baml
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\ProfilePage.g.cs
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug\net8.0-windows\ClosedXML.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug\net8.0-windows\ClosedXML.Parser.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug\net8.0-windows\DocumentFormat.OpenXml.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug\net8.0-windows\DocumentFormat.OpenXml.Framework.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug\net8.0-windows\ExcelNumberFormat.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug\net8.0-windows\RBush.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug\net8.0-windows\SixLabors.Fonts.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug\net8.0-windows\System.IO.Packaging.dll
