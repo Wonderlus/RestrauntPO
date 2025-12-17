@@ -1,7 +1,6 @@
 ﻿<UserControl x:Class="Restraunt.Controls.MenuSidebar"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             >
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Border Padding="12">
 
@@ -9,22 +8,21 @@
 
             <!-- TITLE -->
             <TextBlock Text="Фильтры"
-               FontSize="16"
-               FontWeight="Bold"
-               Foreground="{StaticResource OrangeText}"
-               Margin="0,0,0,16"/>
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource OrangeText}"
+                       Margin="0,0,0,16"/>
 
             <!-- CATEGORIES -->
             <TextBlock Text="Категории"
-               FontWeight="SemiBold"
-               Margin="0,0,0,8"/>
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,8"/>
 
             <ItemsControl x:Name="CategoriesList">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <CheckBox Content="{Binding Name}"
-      IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
-
+                                  IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -33,30 +31,29 @@
 
             <!-- FLAGS -->
             <TextBlock Text="Опции"
-               FontWeight="SemiBold"
-               Margin="0,0,0,8"/>
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,8"/>
 
-            <CheckBox Content="Сезонные блюда"
-              x:Name="SeasonalCheck"/>
+            <CheckBox x:Name="SeasonalCheck"
+                      Content="Сезонные блюда"/>
 
-            <CheckBox Content="Акционные блюда"
-              x:Name="PromoCheck"/>
+            <CheckBox x:Name="PromoCheck"
+                      Content="Акционные блюда"/>
 
             <Separator Margin="0,16"/>
 
             <!-- ACTIONS -->
             <Button Content="Применить"
-            Style="{StaticResource PrimaryButton}"
-            Height="36"
-            Click="Apply_Click"/>
-
-            <Button Content="Сбросить"
-            Margin="0,8,0,0"
                     Style="{StaticResource PrimaryButton}"
                     Height="36"
-            Click="Reset_Click"/>
+                    Click="Apply_Click"/>
+
+            <Button Content="Сбросить"
+                    Margin="0,8,0,0"
+                    Style="{StaticResource PrimaryButton}"
+                    Height="36"
+                    Click="Reset_Click"/>
 
         </StackPanel>
     </Border>
-    
 </UserControl>

@@ -1,80 +1,54 @@
-﻿using BLL;
-using DAL.Entities;
-using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Restraunt.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Restraunt.Controls
 {
-    /// <summary>
-    /// Логика взаимодействия для MenuSidebar.xaml
-    /// </summary>
     public partial class MenuSidebar : UserControl
     {
-        private readonly DishCategoryService _categoryService = new();
-
-        private List<CategoryFilterItem> _categories = new();
-
         public MenuSidebar()
         {
             InitializeComponent();
-            LoadCategories();
+            Loaded += MenuSidebar_Loaded;
         }
 
-        private void LoadCategories()
+        private void MenuSidebar_Loaded(object sender, RoutedEventArgs e)
         {
-            _categories = _categoryService.GetAll()
-                .Select(c => new CategoryFilterItem
-                {
-                    Name = c.Name,
-                    IsSelected = false
-                })
-                .ToList();
+            if (DataContext is not MenuViewModel vm)
+                return;
 
-            CategoriesList.ItemsSource = _categories;
+            // Подключаем категории
+            CategoriesList.ItemsSource = vm.Categories;
+
+            // Синхронизация чекбоксов
+            SeasonalCheck.IsChecked = vm.OnlySeasonal;
+            PromoCheck.IsChecked = vm.OnlyPromotional;
         }
 
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
-            var filters = new MenuFilters
-            {
-                Categories = _categories
-                    .Where(c => c.IsSelected)
-                    .Select(c => c.Name)
-                    .ToList(),
+            if (DataContext is not MenuViewModel vm)
+                return;
 
-                OnlySeasonal = SeasonalCheck.IsChecked == true,
-                OnlyPromotional = PromoCheck.IsChecked == true
-            };
+            // Считываем чекбоксы
+            vm.OnlySeasonal = SeasonalCheck.IsChecked == true;
+            vm.OnlyPromotional = PromoCheck.IsChecked == true;
 
-            if (Window.GetWindow(this) is MainWindow main)
-                main.ApplyMenuFilters(filters);
+            // Применяем фильтры
+            vm.ApplyFilters();
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var cat in _categories)
-                cat.IsSelected = false;
+            if (DataContext is not MenuViewModel vm)
+                return;
 
+            // Сбрасываем UI
             SeasonalCheck.IsChecked = false;
             PromoCheck.IsChecked = false;
 
-            CategoriesList.Items.Refresh();
-
-            if (Window.GetWindow(this) is MainWindow main)
-                main.ApplyMenuFilters(null);
+            // Сбрасываем VM
+            vm.ResetFilters();
         }
     }
 }

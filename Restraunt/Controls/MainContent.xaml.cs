@@ -21,38 +21,42 @@ namespace Restraunt.Controls
             InitializeComponent();
             _dishService = new DishService();
 
-            // Загружаем блюда при старте
-            LoadDishes();
         }
 
-        private void LoadDishes()
-        {
-            _allDishes = _dishService.GetMenuDishes();
-            DishesList.ItemsSource = _allDishes;
-        }
+
 
         /// <summary>
         /// Нажатие на кнопку редактирования блюда
         /// </summary>
         private void EditDish_Click(object sender, RoutedEventArgs e)
         {
+            if (Session.CurrentUser?.IsAdmin != true)
+            {
+                MessageBox.Show("Недостаточно прав");
+                return;
+            }
+
             if (sender is Button button && button.Tag is DishModel dish)
             {
-                var window = new DishEditWindow(dish)
-                {
-                    Owner = Window.GetWindow(this)
-                };
+                var window = new DishEditWindow(dish) { Owner = Window.GetWindow(this) };
 
-                if (window.ShowDialog() == true)
-                    LoadDishes();
+                if (window.ShowDialog() == true && DataContext is MenuViewModel vm)
+                    vm.Reload();
             }
         }
+
 
         /// <summary>
         /// Нажатие на кнопку удаления блюда
         /// </summary>
         private void DeleteDish_Click(object sender, RoutedEventArgs e)
         {
+            if (Session.CurrentUser?.IsAdmin != true)
+            {
+                MessageBox.Show("Недостаточно прав");
+                return;
+            }
+
             if (sender is Button button && button.Tag is DishModel dish)
             {
                 var result = MessageBox.Show(
@@ -65,57 +69,32 @@ namespace Restraunt.Controls
                 if (result == MessageBoxResult.Yes)
                 {
                     _dishService.Delete(dish.Id);
-                    LoadDishes();
+
+                    if (DataContext is MenuViewModel vm)
+                        vm.Reload();
                 }
             }
         }
+
 
         /// <summary>
         /// Добавление нового блюда
         /// </summary>
         private void AddDish_Click(object sender, RoutedEventArgs e)
         {
-            var window = new DishEditWindow
+            if (Session.CurrentUser?.IsAdmin != true)
             {
-                Owner = Window.GetWindow(this)
-            };
-
-            if (window.ShowDialog() == true)
-                LoadDishes();
-        }
-
-        public void ApplyFilters(MenuFilters? filters)
-        {
-            if (_allDishes == null || !_allDishes.Any())
-            {
-                LoadDishes();
-            }
-
-            if (filters == null)
-            {
-                DishesList.ItemsSource = _allDishes;
+                MessageBox.Show("Недостаточно прав");
                 return;
             }
 
-            IEnumerable<DishModel> result = _allDishes;
+            var window = new DishEditWindow { Owner = Window.GetWindow(this) };
 
-            if (filters.Categories.Any())
-            {
-                result = result.Where(d =>
-                    d.CategoryName != null &&
-                    filters.Categories.Any(c =>
-                        string.Equals(c.Trim(), d.CategoryName.Trim(),
-                            StringComparison.OrdinalIgnoreCase)));
-            }
-
-            if (filters.OnlySeasonal)
-                result = result.Where(d => d.IsSeasonal);
-
-            if (filters.OnlyPromotional)
-                result = result.Where(d => d.IsPromotional);
-
-            DishesList.ItemsSource = result.ToList();
+            if (window.ShowDialog() == true && DataContext is MenuViewModel vm)
+                vm.Reload();
         }
+
+
 
 
         private void AddToBasket_Click(object sender, RoutedEventArgs e)

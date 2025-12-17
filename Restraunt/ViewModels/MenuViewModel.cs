@@ -1,70 +1,141 @@
-﻿using Restraunt.Models;  
-using BLL;
+﻿using BLL;
+using Models;
+using Restraunt.Models;
+using Restraunt.Services;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
+using System.Linq;
 
 namespace Restraunt.ViewModels
 {
     public class MenuViewModel : ViewModelBase
     {
-        private readonly DishService _dishService;
 
-        public ObservableCollection<DishModel> Dishes { get; set; }
+        public bool IsAdmin => Session.CurrentUser?.IsAdmin == true;
+        private readonly DishService _dishService = new();
+        private readonly DishCategoryService _categoryService = new();
 
-        public ICommand ShowAllDishesCommand { get; set; }
-        public ICommand ShowSeasonalDishesCommand { get; set; }
-        public ICommand ShowPromotionalDishesCommand { get; set; }
+        // источник истины
+        private List<DishModel> _allDishes = new();
+
+        // то, что отображается в UI
+        public ObservableCollection<DishModel> Dishes { get; } = new();
+
+        // категории для сайдбара
+        public ObservableCollection<CategoryFilterItem> Categories { get; } = new();
+
+        // флаги
+        private bool _onlySeasonal;
+        public bool OnlySeasonal
+        {
+            get => _onlySeasonal;
+            set
+            {
+                _onlySeasonal = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _onlyPromotional;
+        public bool OnlyPromotional
+        {
+            get => _onlyPromotional;
+            set
+            {
+                _onlyPromotional = value;
+                OnPropertyChanged();
+            }
+        }
 
         public MenuViewModel()
         {
-            _dishService = new DishService();
-
-            // Изначально показываем все блюда
-            Dishes = new ObservableCollection<DishModel>(
-                _dishService.GetMenuDishes()
-            );
-
-            // Команды для фильтрации
-            ShowAllDishesCommand = new RelayCommand(ShowAllDishes);
-            ShowSeasonalDishesCommand = new RelayCommand(ShowSeasonalDishes);
-            ShowPromotionalDishesCommand = new RelayCommand(ShowPromotionalDishes);
+            LoadData();
+            OnPropertyChanged(nameof(IsAdmin));
         }
 
-        private void ShowAllDishes()
+        // =========================
+        // ЗАГРУЗКА ДАННЫХ
+        // =========================
+        private void LoadData()
         {
-            Dishes.Clear();
-            var allDishes = _dishService.GetMenuDishes();
-            foreach (var dish in allDishes)
+            // грузим блюда
+            _allDishes = _dishService.GetMenuDishes().ToList();
+            ReplaceDishes(_allDishes);
+
+            // грузим категории
+            var cats = _categoryService.GetAll();
+            Categories.Clear();
+
+            foreach (var c in cats)
             {
-                Dishes.Add(dish);
+                Categories.Add(new CategoryFilterItem
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    IsSelected = false
+                });
             }
         }
 
-        private void ShowSeasonalDishes()
+        // =========================
+        // ФИЛЬТРАЦИЯ
+        // =========================
+        public void ApplyFilters()
         {
-            Dishes.Clear();
-            var seasonalDishes = _dishService.GetMenuDishes()
-                .Where(d => d.IsSeasonal)
-                .ToList();
+            IEnumerable<DishModel> query = _allDishes;
 
-            foreach (var dish in seasonalDishes)
+            // фильтр по категориям
+            var selectedCategoryIds = Categories
+                .Where(x => x.IsSelected)
+                .Select(x => x.Id)
+                .ToHashSet();
+
+            if (selectedCategoryIds.Count > 0)
             {
-                Dishes.Add(dish);
+                query = query.Where(d =>
+                    d.CategoryId.HasValue &&
+                    selectedCategoryIds.Contains(d.CategoryId.Value));
             }
+
+            // сезонные
+            if (OnlySeasonal)
+                query = query.Where(d => d.IsSeasonal);
+
+            // акционные
+            if (OnlyPromotional)
+                query = query.Where(d => d.IsPromotional);
+
+            ReplaceDishes(query.ToList());
         }
 
-        private void ShowPromotionalDishes()
+        public void ResetFilters()
+        {
+            // сброс категорий
+            foreach (var c in Categories)
+                c.IsSelected = false;
+
+            // сброс флагов
+            OnlySeasonal = false;
+            OnlyPromotional = false;
+
+            ReplaceDishes(_allDishes);
+        }
+
+        // =========================
+        // ОБНОВЛЕНИЕ UI
+        // =========================
+        private void ReplaceDishes(IEnumerable<DishModel> items)
         {
             Dishes.Clear();
-            var promotionalDishes = _dishService.GetMenuDishes()
-                .Where(d => d.IsPromotional)
-                .ToList();
-
-            foreach (var dish in promotionalDishes)
-            {
-                Dishes.Add(dish);
-            }
+            foreach (var d in items)
+                Dishes.Add(d);
         }
+
+        public void Reload()
+        {
+            _allDishes = _dishService.GetMenuDishes().ToList();
+            OnPropertyChanged(nameof(IsAdmin));
+            ApplyFilters();
+        }
+
     }
 }

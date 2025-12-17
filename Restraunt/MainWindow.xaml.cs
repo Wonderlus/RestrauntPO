@@ -38,14 +38,19 @@ namespace Restraunt
 
         public void NavigateToMenu()
         {
-            _menuPage = new MainContent();
-            MainContentHost.Content = _menuPage;
-            SidebarHost.SetMenuSidebar();
+            var vm = new MenuViewModel();
+
+            MainContentHost.Content = new MainContent
+            {
+                DataContext = vm
+            };
+
+            SidebarHost.Content = new MenuSidebar
+            {
+                DataContext = vm
+            };
         }
-        public void ApplyMenuFilters(MenuFilters? filters)
-        {
-            _menuPage?.ApplyFilters(filters);
-        }
+        
 
         //public void NavigateToOrders()
         //{
