@@ -2699,6 +2699,7 @@
       "BLL >= 1.0.0",
       "ClosedXML >= 0.105.0",
       "CommunityToolkit.Mvvm >= 8.4.0",
+      "DAL >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 8.0.4",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.4",
       "Microsoft.EntityFrameworkCore.Tools >= 8.0.4",
@@ -2739,6 +2740,9 @@
           "projectReferences": {
             "C:\\Coding\\ISPU\\Конструирование ПО\\Restraunt\\BLL\\BLL.csproj": {
               "projectPath": "C:\\Coding\\ISPU\\Конструирование ПО\\Restraunt\\BLL\\BLL.csproj"
+            },
+            "C:\\Coding\\ISPU\\Конструирование ПО\\Restraunt\\DAL\\DAL.csproj": {
+              "projectPath": "C:\\Coding\\ISPU\\Конструирование ПО\\Restraunt\\DAL\\DAL.csproj"
             },
             "C:\\Coding\\ISPU\\Конструирование ПО\\Restraunt\\Models\\Models.csproj": {
               "projectPath": "C:\\Coding\\ISPU\\Конструирование ПО\\Restraunt\\Models\\Models.csproj"

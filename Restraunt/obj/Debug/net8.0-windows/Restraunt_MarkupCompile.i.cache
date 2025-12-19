@@ -16,5 +16,5 @@ C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\App.xaml
 223313049763
 Controls\BasketPage.xaml;Controls\CustomersPage.xaml;Controls\DeliveryAddressesPage.xaml;Controls\Footer.xaml;Controls\MainContent.xaml;Controls\MenuSidebar.xaml;Controls\OrdersPage.xaml;Controls\OrdersSidebar.xaml;Controls\ProfilePage.xaml;Controls\Sidebar.xaml;Controls\StatisticsPage.xaml;Controls\TopNavBar.xaml;Controls\UsersPage.xaml;MainWindow.xaml;Windows\CheckoutWindow.xaml;Windows\DishEditWindow.xaml;Windows\EditOrderWindow.xaml;Windows\LoginWindow.xaml;Windows\RegisterWindow.xaml;
 
-True
+False
 
