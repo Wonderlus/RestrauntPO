@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Restraunt.Controls.DeliveryAddressesPage"
+<UserControl x:Class="Restraunt.Controls.DeliveryAddressesPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="{StaticResource OrangeBg}">
@@ -19,14 +19,15 @@
                        Margin="0,0,0,16"/>
 
             <!-- Список адресов -->
-            <ListBox x:Name="AddressList"
+            <ListBox ItemsSource="{Binding Addresses}"
+                     SelectedItem="{Binding SelectedAddress}"
                      DisplayMemberPath="Address"
                      Height="200"
                      Margin="0,0,0,12"/>
 
             <!-- Новый адрес -->
             <TextBlock Text="Новый адрес" Margin="0,0,0,4"/>
-            <TextBox x:Name="NewAddressTextBox"
+            <TextBox Text="{Binding NewAddress, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0,0,0,12"/>
 
             <!-- Кнопки -->
@@ -36,12 +37,12 @@
                 <Button Content="Удалить"
                         Width="100"
                         Margin="0,0,8,0"
-                        Click="Remove_Click"/>
+                        Command="{Binding RemoveCommand}"/>
 
                 <Button Content="Добавить"
                         Width="120"
                         Style="{StaticResource PrimaryButton}"
-                        Click="Add_Click"/>
+                        Command="{Binding AddCommand}"/>
             </StackPanel>
 
         </StackPanel>

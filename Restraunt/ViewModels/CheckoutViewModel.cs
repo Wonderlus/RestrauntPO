@@ -1,13 +1,10 @@
-﻿using BLL;
+using BLL;
 using CommunityToolkit.Mvvm.Input;
 using DAL.Entities;
 using Restraunt.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,7 +12,6 @@ namespace Restraunt.ViewModels
 {
     public class CheckoutViewModel : ViewModelBase
     {
-
         private readonly DeliveryAddressService _addressService = new();
         public DeliveryAddressEntity? SelectedAddress { get; set; }
         public List<DeliveryAddressEntity> DeliveryAddresses { get; private set; } = new();
@@ -23,7 +19,6 @@ namespace Restraunt.ViewModels
 
         public CheckoutViewModel(decimal totalAmount)
         {
-
             DeliveryAddresses = _addressService.GetAddresses(Session.CurrentUser.Id);
             OnPropertyChanged(nameof(DeliveryAddresses));
             TotalAmount = totalAmount;
@@ -39,6 +34,7 @@ namespace Restraunt.ViewModels
             DeliveryTimeText = "01:00";
 
             ConfirmOrderCommand = new RelayCommand(CreateOrder);
+            CancelCommand = new RelayCommand(OnCancel);
         }
 
         public List<string> OrderTypes { get; }
@@ -57,19 +53,25 @@ namespace Restraunt.ViewModels
 
         public bool IsDelivery => SelectedOrderType == "доставка";
 
-
-        // ✅ вместо DateTime?
         public string DeliveryTimeText { get; set; } // "HH:mm"
 
         public string? SpecialRequests { get; set; }
         public decimal TotalAmount { get; }
 
         public ICommand ConfirmOrderCommand { get; }
+        public ICommand CancelCommand { get; }
+        
         public event Action? OrderCreated;
+        public event Action? Cancelled;
+
+        private void OnCancel()
+        {
+            Cancelled?.Invoke();
+        }
 
         private void CreateOrder()
         {
-            // ⚠️ Проверка адреса при доставке
+            // Проверка адреса при доставке
             if (IsDelivery && SelectedAddress == null)
             {
                 MessageBox.Show(
@@ -111,8 +113,6 @@ namespace Restraunt.ViewModels
                 SpecialRequests
             );
 
-
-
             if (discount < 1)
             {
                 MessageBox.Show(
@@ -124,8 +124,5 @@ namespace Restraunt.ViewModels
             }
             OrderCreated?.Invoke();
         }
-
-
     }
-
 }

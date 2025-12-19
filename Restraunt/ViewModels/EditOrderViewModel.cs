@@ -1,4 +1,5 @@
-﻿using BLL;
+using BLL;
+using CommunityToolkit.Mvvm.Input;
 using DAL.Entities;
 using Restraunt.Services;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Restraunt.ViewModels
 {
@@ -30,11 +32,11 @@ namespace Restraunt.ViewModels
         };
 
         public List<string> OrderTypes { get; } = new()
-{
-    "на месте",
-    "самовывоз",
-    "доставка"
-};
+        {
+            "на месте",
+            "самовывоз",
+            "доставка"
+        };
 
         private string _selectedOrderType;
         public string SelectedOrderType
@@ -79,8 +81,14 @@ namespace Restraunt.ViewModels
             set { _selectedStatus = value; OnPropertyChanged(); }
         }
 
-        public bool CanEditType =>
-    IsAdmin || Order.Status == "принят";
+        public bool CanEditType => IsAdmin || Order.Status == "принят";
+
+        // Commands
+        public ICommand SaveCommand { get; }
+        public ICommand CancelCommand { get; }
+
+        // Action callback for closing the window with result
+        public Action<bool>? RequestClose { get; set; }
 
         public EditOrderViewModel(OrderEntity order)
         {
@@ -101,6 +109,23 @@ namespace Restraunt.ViewModels
                 SelectedAddress = DeliveryAddresses.FirstOrDefault(a => a.Id == order.DeliveryAddressId.Value);
 
             SelectedStatus = order.Status;
+
+            // Initialize commands
+            SaveCommand = new RelayCommand(OnSave);
+            CancelCommand = new RelayCommand(OnCancel);
+        }
+
+        private void OnSave()
+        {
+            if (Save())
+            {
+                RequestClose?.Invoke(true);
+            }
+        }
+
+        private void OnCancel()
+        {
+            RequestClose?.Invoke(false);
         }
 
         public bool Save()
@@ -131,14 +156,14 @@ namespace Restraunt.ViewModels
             {
                 // 1) редактируем заказ (адрес/время/коммент)
                 _orderService.UpdateOrder(
-    Order.Id,
-    Session.CurrentUser.Id,
-    IsAdmin,
-    SelectedOrderType,
-    IsDelivery ? SelectedAddress?.Id : null,
-    IsDelivery ? eta : null,
-    SpecialRequests
-);
+                    Order.Id,
+                    Session.CurrentUser.Id,
+                    IsAdmin,
+                    SelectedOrderType,
+                    IsDelivery ? SelectedAddress?.Id : null,
+                    IsDelivery ? eta : null,
+                    SpecialRequests
+                );
 
                 // 2) статус — только для админа
                 if (IsAdmin && SelectedStatus != Order.Status)

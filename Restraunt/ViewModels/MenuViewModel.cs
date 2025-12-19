@@ -1,18 +1,23 @@
-﻿using BLL;
+using BLL;
+using CommunityToolkit.Mvvm.Input;
 using Models;
 using Restraunt.Models;
 using Restraunt.Services;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Restraunt.ViewModels
 {
     public class MenuViewModel : ViewModelBase
     {
-
         public bool IsAdmin => Session.CurrentUser?.IsAdmin == true;
         private readonly DishService _dishService = new();
         private readonly DishCategoryService _categoryService = new();
+        private readonly BasketService _basketService = new();
 
         // источник истины
         private List<DishModel> _allDishes = new();
@@ -46,8 +51,28 @@ namespace Restraunt.ViewModels
             }
         }
 
+        // Commands
+        public ICommand ApplyFiltersCommand { get; }
+        public ICommand ResetFiltersCommand { get; }
+        public ICommand AddDishCommand { get; }
+        public IRelayCommand<DishModel> EditDishCommand { get; }
+        public IRelayCommand<DishModel> DeleteDishCommand { get; }
+        public IRelayCommand<DishModel> AddToBasketCommand { get; }
+
+        // Events for dialog requests (View subscribes to these)
+        public event Action? RequestAddDish;
+        public event Action<DishModel>? RequestEditDish;
+
         public MenuViewModel()
         {
+            // Initialize commands
+            ApplyFiltersCommand = new RelayCommand(ApplyFilters);
+            ResetFiltersCommand = new RelayCommand(ResetFilters);
+            AddDishCommand = new RelayCommand(OnAddDish);
+            EditDishCommand = new RelayCommand<DishModel>(OnEditDish);
+            DeleteDishCommand = new RelayCommand<DishModel>(OnDeleteDish);
+            AddToBasketCommand = new RelayCommand<DishModel>(OnAddToBasket);
+
             LoadData();
             OnPropertyChanged(nameof(IsAdmin));
         }
@@ -121,6 +146,71 @@ namespace Restraunt.ViewModels
         }
 
         // =========================
+        // DISH OPERATIONS
+        // =========================
+        private void OnAddDish()
+        {
+            if (Session.CurrentUser?.IsAdmin != true)
+            {
+                MessageBox.Show("Недостаточно прав");
+                return;
+            }
+
+            RequestAddDish?.Invoke();
+        }
+
+        private void OnEditDish(DishModel? dish)
+        {
+            if (dish == null) return;
+
+            if (Session.CurrentUser?.IsAdmin != true)
+            {
+                MessageBox.Show("Недостаточно прав");
+                return;
+            }
+
+            RequestEditDish?.Invoke(dish);
+        }
+
+        private void OnDeleteDish(DishModel? dish)
+        {
+            if (dish == null) return;
+
+            if (Session.CurrentUser?.IsAdmin != true)
+            {
+                MessageBox.Show("Недостаточно прав");
+                return;
+            }
+
+            var result = MessageBox.Show(
+                $"Удалить блюдо «{dish.Name}»?",
+                "Удаление блюда",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+            );
+
+            if (result == MessageBoxResult.Yes)
+            {
+                _dishService.Delete(dish.Id);
+                Reload();
+            }
+        }
+
+        private void OnAddToBasket(DishModel? dish)
+        {
+            if (dish == null) return;
+
+            if (Session.CurrentUser == null)
+            {
+                MessageBox.Show("Вы не вошли в систему");
+                return;
+            }
+
+            _basketService.AddDish(Session.CurrentUser.Id, dish.Id);
+            MessageBox.Show($"«{dish.Name}» добавлено в корзину");
+        }
+
+        // =========================
         // ОБНОВЛЕНИЕ UI
         // =========================
         private void ReplaceDishes(IEnumerable<DishModel> items)
@@ -136,6 +226,5 @@ namespace Restraunt.ViewModels
             OnPropertyChanged(nameof(IsAdmin));
             ApplyFilters();
         }
-
     }
 }

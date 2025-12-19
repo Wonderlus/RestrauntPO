@@ -1,4 +1,3 @@
-﻿using Models;
 using Restraunt.ViewModels;
 using Restraunt.Windows;
 using System.Windows;
@@ -15,12 +14,18 @@ namespace Restraunt.Controls
             InitializeComponent();
             DataContext = _vm;
             _vm.LoadBasket();
+
+            _vm.RequestCheckout += OnRequestCheckout;
+            Unloaded += BasketPage_Unloaded;
         }
 
-        private void Checkout_Click(object sender, RoutedEventArgs e)
+        private void BasketPage_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (_vm.Items.Count == 0) return;
+            _vm.RequestCheckout -= OnRequestCheckout;
+        }
 
+        private void OnRequestCheckout()
+        {
             var win = new CheckoutWindow(_vm.TotalPrice)
             {
                 Owner = Window.GetWindow(this)

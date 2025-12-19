@@ -1,47 +1,31 @@
-﻿using BLL;
-using Restraunt.Services;
+using Restraunt.ViewModels;
 using System.Windows;
 
 namespace Restraunt.Windows
 {
     public partial class LoginWindow : Window
     {
-        private readonly AuthService _authService = new();
+        private readonly LoginViewModel _vm = new();
 
         public LoginWindow()
         {
             InitializeComponent();
+            DataContext = _vm;
+
+            _vm.LoginSuccess += OnLoginSuccess;
+            _vm.RequestOpenRegister += OnRequestOpenRegister;
         }
 
-        private void Login_Click(object sender, RoutedEventArgs e)
+        private void OnLoginSuccess()
         {
-            var phone = PhoneBox.Text;
-            var password = PasswordBox.Password;
-
-            var user = _authService.Login(phone, password);
-
-            if (user == null)
-            {
-                MessageBox.Show("Неверный телефон или пароль");
-                return;
-            }
-
-            Session.CurrentUser = user;
-
-            // обновляем AppViewModel
-            if (Application.Current.MainWindow?.DataContext is AppViewModel appVm)
-                appVm.RefreshUser();
-
+            // Open main window
             var main = new MainWindow();
-
-            // ВОТ ЭТО ВАЖНО
             Application.Current.MainWindow = main;
-
             main.Show();
             Close();
         }
 
-        private void OpenRegister_Click(object sender, RoutedEventArgs e)
+        private void OnRequestOpenRegister()
         {
             var window = new RegisterWindow
             {

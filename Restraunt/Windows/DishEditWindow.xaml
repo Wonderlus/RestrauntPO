@@ -1,7 +1,7 @@
-﻿<Window x:Class="Restraunt.Windows.DishEditWindow"
+<Window x:Class="Restraunt.Windows.DishEditWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Dish"
+        Title="{Binding WindowTitle}"
         Height="520"
         Width="420"
         WindowStartupLocation="CenterOwner"
@@ -32,10 +32,10 @@
 
             <TextBlock Text="Category"/>
             <ComboBox ItemsSource="{Binding Categories}"
-          DisplayMemberPath="Name"
-          SelectedValuePath="Id"
-          SelectedValue="{Binding Dish.CategoryId}"
-          Margin="0,4,0,12"/>
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding Dish.CategoryId}"
+                      Margin="0,4,0,12"/>
 
             <!-- Price -->
             <TextBlock Text="Price"/>
@@ -61,10 +61,10 @@
                         HorizontalAlignment="Right">
                 <Button Content="Cancel"
                         Margin="0,0,8,0"
-                        Click="Cancel_Click"/>
+                        Command="{Binding CancelCommand}"/>
                 <Button Content="Save"
                         Style="{StaticResource PrimaryButton}"
-                        Click="Save_Click"/>
+                        Command="{Binding SaveCommand}"/>
             </StackPanel>
 
         </StackPanel>

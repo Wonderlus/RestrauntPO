@@ -1,4 +1,4 @@
-﻿using DAL.Entities;
+using DAL.Entities;
 using Restraunt.ViewModels;
 using System.Windows;
 
@@ -13,21 +13,13 @@ namespace Restraunt.Windows
             InitializeComponent();
             _vm = new EditOrderViewModel(order);
             DataContext = _vm;
-        }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-            if (_vm.Save())
+            // Set up the close callback
+            _vm.RequestClose = result =>
             {
-                DialogResult = true;
+                DialogResult = result;
                 Close();
-            }
-        }
-
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
+            };
         }
     }
 }

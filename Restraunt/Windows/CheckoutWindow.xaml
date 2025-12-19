@@ -1,4 +1,4 @@
-﻿<Window x:Class="Restraunt.Windows.CheckoutWindow"
+<Window x:Class="Restraunt.Windows.CheckoutWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Оформление заказа"
@@ -33,17 +33,17 @@
             <!-- Адрес -->
             <TextBlock Text="Адрес доставки" Margin="0,0,0,4"/>
             <ComboBox ItemsSource="{Binding DeliveryAddresses}"
-          DisplayMemberPath="Address"
-          SelectedItem="{Binding SelectedAddress}"
-          IsEnabled="{Binding IsDelivery}"
-          Margin="0,0,0,12"/>
+                      DisplayMemberPath="Address"
+                      SelectedItem="{Binding SelectedAddress}"
+                      IsEnabled="{Binding IsDelivery}"
+                      Margin="0,0,0,12"/>
 
             <!-- Время -->
             <TextBlock Text="Время доставки (HH:mm)" Margin="0,0,0,4"/>
 
             <TextBox Text="{Binding DeliveryTimeText}"
-         IsEnabled="{Binding IsDelivery}"
-         Margin="0,0,0,12"/>
+                     IsEnabled="{Binding IsDelivery}"
+                     Margin="0,0,0,12"/>
 
             <!-- Комментарий -->
             <TextBlock Text="Комментарий" Margin="0,0,0,4"/>
@@ -65,7 +65,8 @@
 
                 <Button Content="Отмена"
                         Width="100"
-                        Margin="0,0,8,0"/>
+                        Margin="0,0,8,0"
+                        Command="{Binding CancelCommand}"/>
 
                 <Button Content="Подтвердить"
                         Width="140"

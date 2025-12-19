@@ -1,4 +1,5 @@
-﻿using Restraunt.ViewModels;
+using DAL.Entities;
+using Restraunt.ViewModels;
 using Restraunt.Windows;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,41 +11,35 @@ namespace Restraunt.Controls
         public OrdersPage()
         {
             InitializeComponent();
+            Loaded += OrdersPage_Loaded;
+            Unloaded += OrdersPage_Unloaded;
         }
 
-        private void CancelOrder_Click(object sender, RoutedEventArgs e)
+        private void OrdersPage_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is not OrdersViewModel vm)
-                return;
-
-            var result = MessageBox.Show(
-                "Вы действительно хотите отменить заказ?",
-                "Отмена заказа",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-
-            if (result == MessageBoxResult.Yes)
-                vm.CancelSelectedOrder();
+            if (DataContext is OrdersViewModel vm)
+            {
+                vm.RequestEditOrder += OnRequestEditOrder;
+            }
         }
 
-        private void EditOrder_Click(object sender, RoutedEventArgs e)
+        private void OrdersPage_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is not OrdersViewModel vm || vm.SelectedOrder == null)
-                return;
+            if (DataContext is OrdersViewModel vm)
+            {
+                vm.RequestEditOrder -= OnRequestEditOrder;
+            }
+        }
 
-            var win = new EditOrderWindow(vm.SelectedOrder)
+        private void OnRequestEditOrder(OrderEntity order)
+        {
+            var win = new EditOrderWindow(order)
             {
                 Owner = Window.GetWindow(this)
             };
 
-            if (win.ShowDialog() == true)
+            if (win.ShowDialog() == true && DataContext is OrdersViewModel vm)
                 vm.Reload();
-        }
-
-        private void ExportOrders_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is OrdersViewModel vm)
-                vm.ExportOrdersToExcel();
         }
     }
 }

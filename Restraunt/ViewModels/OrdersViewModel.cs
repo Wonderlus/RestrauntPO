@@ -1,8 +1,12 @@
-﻿using BLL;
+using BLL;
+using CommunityToolkit.Mvvm.Input;
 using DAL.Entities;
 using Restraunt.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Restraunt.ViewModels
 {
@@ -109,6 +113,10 @@ namespace Restraunt.ViewModels
                 OnPropertyChanged(nameof(Subtotal));
                 OnPropertyChanged(nameof(DiscountPercent));
                 OnPropertyChanged(nameof(DiscountAmount));
+
+                // Notify commands that CanExecute may have changed
+                (EditOrderCommand as RelayCommand)?.NotifyCanExecuteChanged();
+                (CancelOrderCommand as RelayCommand)?.NotifyCanExecuteChanged();
             }
         }
 
@@ -133,9 +141,23 @@ namespace Restraunt.ViewModels
         public DateTime ExportFrom { get; set; } = DateTime.Today.AddDays(-7);
         public DateTime ExportTo { get; set; } = DateTime.Today;
 
+        // ===== COMMANDS =====
+        public ICommand ExportOrdersCommand { get; }
+        public ICommand EditOrderCommand { get; }
+        public ICommand CancelOrderCommand { get; }
+        public ICommand ResetFiltersCommand { get; }
+
+        // ===== EVENTS FOR DIALOG REQUESTS =====
+        public event Action<OrderEntity>? RequestEditOrder;
+
         // ===== КОНСТРУКТОР =====
         public OrdersViewModel()
         {
+            ExportOrdersCommand = new RelayCommand(ExportOrdersToExcel);
+            EditOrderCommand = new RelayCommand(OnEditOrder, () => CanEdit);
+            CancelOrderCommand = new RelayCommand(OnCancelOrder, () => CanCancel);
+            ResetFiltersCommand = new RelayCommand(ResetFilters);
+
             LoadOrders();
         }
 
@@ -181,7 +203,33 @@ namespace Restraunt.ViewModels
                 .ToList();
         }
 
+        private void ResetFilters()
+        {
+            SelectedStatus = "Все";
+            SelectedOrderType = "Все";
+        }
+
         // ===== ДЕЙСТВИЯ =====
+        private void OnEditOrder()
+        {
+            if (SelectedOrder == null) return;
+            RequestEditOrder?.Invoke(SelectedOrder);
+        }
+
+        private void OnCancelOrder()
+        {
+            if (SelectedOrder == null) return;
+
+            var result = MessageBox.Show(
+                "Вы действительно хотите отменить заказ?",
+                "Отмена заказа",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+                CancelSelectedOrder();
+        }
+
         public void CancelSelectedOrder()
         {
             if (SelectedOrder == null || Session.CurrentUser == null)

@@ -1,6 +1,9 @@
-﻿using BLL;
+using BLL;
+using CommunityToolkit.Mvvm.Input;
 using Restraunt.Services;
+using System;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Restraunt.ViewModels
 {
@@ -29,8 +32,12 @@ namespace Restraunt.ViewModels
             set { _email = value; OnPropertyChanged(); }
         }
 
+        public ICommand SaveCommand { get; }
+
         public ProfileViewModel()
         {
+            SaveCommand = new RelayCommand(Save);
+
             if (Session.CurrentUser == null) return;
 
             FullName = Session.CurrentUser.FullName;
@@ -64,14 +71,11 @@ namespace Restraunt.ViewModels
                 Session.CurrentUser.FullName = FullName;
                 Session.CurrentUser.Phone = Phone;
                 Session.CurrentUser.Email = Email;
-                MessageBox.Show(FullName);
-                // 🔥 ВАЖНО: уведомляем AppViewModel
+                MessageBox.Show("Профиль сохранен");
+                // Уведомляем AppViewModel
                 Session.NotifyUserUpdated();
-
-
-
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }

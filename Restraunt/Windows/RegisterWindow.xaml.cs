@@ -1,33 +1,22 @@
-﻿using System.Windows;
-using BLL;
+using Restraunt.ViewModels;
+using System.Windows;
 
 namespace Restraunt.Windows
 {
     public partial class RegisterWindow : Window
     {
-        private readonly AuthService _authService = new();
+        private readonly RegisterViewModel _vm = new();
 
         public RegisterWindow()
         {
             InitializeComponent();
+            DataContext = _vm;
+
+            _vm.RegistrationSuccess += OnRegistrationSuccess;
         }
 
-        private void Register_Click(object sender, RoutedEventArgs e)
+        private void OnRegistrationSuccess()
         {
-            var success = _authService.Register(
-                NameBox.Text,
-                PhoneBox.Text,
-                EmailBox.Text,
-                PasswordBox.Password
-            );
-
-            if (!success)
-            {
-                MessageBox.Show("User with this phone already exists");
-                return;
-            }
-
-            MessageBox.Show("Registration successful");
             Close();
         }
     }

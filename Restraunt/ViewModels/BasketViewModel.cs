@@ -1,11 +1,13 @@
-﻿using BLL;
+using BLL;
 using CommunityToolkit.Mvvm.Input;
 using Models;
 using Restraunt.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace Restraunt.ViewModels
 {
@@ -18,6 +20,7 @@ namespace Restraunt.ViewModels
             IncreaseCommand = new RelayCommand<BasketItemModel>(Increase);
             DecreaseCommand = new RelayCommand<BasketItemModel>(Decrease);
             RemoveCommand = new RelayCommand<BasketItemModel>(Remove);
+            CheckoutCommand = new RelayCommand(OnCheckout, CanCheckout);
         }
 
         private List<BasketItemModel> _items = new();
@@ -29,6 +32,7 @@ namespace Restraunt.ViewModels
                 _items = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(TotalPrice));
+                (CheckoutCommand as RelayCommand)?.NotifyCanExecuteChanged();
             }
         }
 
@@ -37,6 +41,10 @@ namespace Restraunt.ViewModels
         public IRelayCommand<BasketItemModel> IncreaseCommand { get; }
         public IRelayCommand<BasketItemModel> DecreaseCommand { get; }
         public IRelayCommand<BasketItemModel> RemoveCommand { get; }
+        public ICommand CheckoutCommand { get; }
+
+        // Event for checkout request (View subscribes to open CheckoutWindow)
+        public event Action? RequestCheckout;
 
         public void LoadBasket()
         {
@@ -63,6 +71,14 @@ namespace Restraunt.ViewModels
             if (item == null || Session.CurrentUser == null) return;
             _basketService.Remove(Session.CurrentUser.Id, item.DishId);
             LoadBasket();
+        }
+
+        private bool CanCheckout() => Items.Count > 0;
+
+        private void OnCheckout()
+        {
+            if (Items.Count == 0) return;
+            RequestCheckout?.Invoke();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

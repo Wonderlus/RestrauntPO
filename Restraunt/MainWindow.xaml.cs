@@ -1,16 +1,11 @@
-﻿using Models;
+using CommunityToolkit.Mvvm.Messaging;
 using Restraunt.Controls;
+using Restraunt.Messages;
+using Restraunt.Services;
 using Restraunt.ViewModels;
-using System.Text;
+using Restraunt.Windows;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Restraunt
 {
@@ -19,15 +14,46 @@ namespace Restraunt
     /// </summary>
     public partial class MainWindow : Window
     {
-
         private readonly AppViewModel _appVm = new();
-        private MainContent? _menuPage;
+
         public MainWindow()
         {
             InitializeComponent();
             DataContext = _appVm;
 
-            // Страница по умолчанию
+            // Register for navigation messages
+            WeakReferenceMessenger.Default.Register<NavigateToPageMessage>(this, (r, m) =>
+            {
+                switch (m.Value)
+                {
+                    case "Menu":
+                        NavigateToMenu();
+                        break;
+                    case "Basket":
+                        NavigateToBasket();
+                        break;
+                    case "Orders":
+                        NavigateToOrders();
+                        break;
+                    case "Profile":
+                        NavigateToProfile();
+                        break;
+                    case "Customers":
+                        NavigateToCustomers();
+                        break;
+                    case "Addresses":
+                        NavigateToAddresses();
+                        break;
+                }
+            });
+
+            // Register for logout message
+            WeakReferenceMessenger.Default.Register<LogoutMessage>(this, (r, m) =>
+            {
+                Logout();
+            });
+
+            // Default page
             NavigateToMenu();
         }
 
@@ -50,14 +76,6 @@ namespace Restraunt
                 DataContext = vm
             };
         }
-        
-
-        //public void NavigateToOrders()
-        //{
-        //    Navigate(new OrdersPage());
-        //    SidebarHost.SetOrdersSidebar();
-        //}
-
 
         public void NavigateToBasket()
         {
@@ -71,7 +89,7 @@ namespace Restraunt
             SidebarHost.SetEmptySidebar();
         }
 
-        public void NavigateToAdresses()
+        public void NavigateToAddresses()
         {
             Navigate(new DeliveryAddressesPage());
             SidebarHost.SetEmptySidebar();
@@ -104,6 +122,20 @@ namespace Restraunt
             SidebarHost.SetEmptySidebar();
         }
 
+        private void Logout()
+        {
+            // Unregister from messages
+            WeakReferenceMessenger.Default.UnregisterAll(this);
 
+            // Clear session
+            Session.CurrentUser = null;
+
+            // Open login window
+            var loginWindow = new LoginWindow();
+            loginWindow.Show();
+
+            // Close current window
+            Close();
+        }
     }
 }
