@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\App.xaml
 18-1679344972
 
-36-1104550862
+41-1537209312
 223313049763
 Controls\BasketPage.xaml;Controls\CustomersPage.xaml;Controls\DeliveryAddressesPage.xaml;Controls\Footer.xaml;Controls\MainContent.xaml;Controls\MenuSidebar.xaml;Controls\OrdersPage.xaml;Controls\OrdersSidebar.xaml;Controls\ProfilePage.xaml;Controls\Sidebar.xaml;Controls\TopNavBar.xaml;Controls\UsersPage.xaml;MainWindow.xaml;Windows\CheckoutWindow.xaml;Windows\DishEditWindow.xaml;Windows\EditOrderWindow.xaml;Windows\LoginWindow.xaml;Windows\RegisterWindow.xaml;
 
-True
+False
 
