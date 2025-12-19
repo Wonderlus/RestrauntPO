@@ -16,12 +16,19 @@ namespace Restraunt.ViewModels
         public DeliveryAddressEntity? SelectedAddress { get; set; }
         public List<DeliveryAddressEntity> DeliveryAddresses { get; private set; } = new();
         private readonly OrderService _orderService = new();
+        private readonly LoyaltyService _loyaltyService = new();
 
-        public CheckoutViewModel(decimal totalAmount)
+        private decimal _subtotal; // Сумма корзины без скидок
+        private int _pointsToUse = 0;
+
+        public CheckoutViewModel(decimal subtotal)
         {
+            _subtotal = subtotal;
             DeliveryAddresses = _addressService.GetAddresses(Session.CurrentUser.Id);
             OnPropertyChanged(nameof(DeliveryAddresses));
-            TotalAmount = totalAmount;
+
+            // Загружаем доступные баллы
+            AvailablePoints = _loyaltyService.GetCustomerPoints(Session.CurrentUser.Id);
 
             OrderTypes = new()
             {
@@ -35,6 +42,9 @@ namespace Restraunt.ViewModels
 
             ConfirmOrderCommand = new RelayCommand(CreateOrder);
             CancelCommand = new RelayCommand(OnCancel);
+
+            // Пересчитываем итоговую сумму
+            RecalculateTotal();
         }
 
         public List<string> OrderTypes { get; }
@@ -56,7 +66,26 @@ namespace Restraunt.ViewModels
         public string DeliveryTimeText { get; set; } // "HH:mm"
 
         public string? SpecialRequests { get; set; }
-        public decimal TotalAmount { get; }
+
+        // Баллы
+        public int AvailablePoints { get; private set; }
+
+        public int PointsToUse
+        {
+            get => _pointsToUse;
+            set
+            {
+                if (value < 0) value = 0;
+                if (value > AvailablePoints) value = AvailablePoints;
+                _pointsToUse = value;
+                OnPropertyChanged();
+                RecalculateTotal();
+            }
+        }
+
+        public decimal TotalAmount { get; private set; }
+
+        public decimal PointsDiscountAmount { get; private set; }
 
         public ICommand ConfirmOrderCommand { get; }
         public ICommand CancelCommand { get; }
@@ -104,25 +133,60 @@ namespace Restraunt.ViewModels
 
                 eta = parsed;
             }
-            
-            var discount = _orderService.CreateOrder(
-                Session.CurrentUser.Id,
-                SelectedOrderType,
-                SelectedAddress?.Id,
-                eta,
-                SpecialRequests
-            );
 
-            if (discount < 1)
+            try
+            {
+                var discount = _orderService.CreateOrder(
+                    Session.CurrentUser.Id,
+                    SelectedOrderType,
+                    SelectedAddress?.Id,
+                    eta,
+                    SpecialRequests,
+                    PointsToUse
+                );
+
+                // Обновляем баланс баллов в сессии
+                if (Session.CurrentUser != null)
+                {
+                    Session.CurrentUser.LoyaltyPoints = _loyaltyService.GetCustomerPoints(Session.CurrentUser.Id);
+                    Session.NotifyUserUpdated();
+                }
+
+                if (discount < 1)
+                {
+                    MessageBox.Show(
+                        $"Вам применена скидка {(int)((1 - discount) * 100)}%",
+                        "Скидка",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
+                }
+
+                OrderCreated?.Invoke();
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Вам применена скидка {(int)((1 - discount) * 100)}%",
-                    "Скидка",
+                    ex.Message,
+                    "Ошибка при создании заказа",
                     MessageBoxButton.OK,
-                    MessageBoxImage.Information
+                    MessageBoxImage.Error
                 );
             }
-            OrderCreated?.Invoke();
+        }
+
+        private void RecalculateTotal()
+        {
+            // 1. Применяем скидку от суммы заказа
+            decimal discountMultiplier = OrderService.CalculateDiscount(_subtotal);
+            decimal totalAfterDiscount = _subtotal * discountMultiplier;
+
+            // 2. Применяем скидку от баллов
+            PointsDiscountAmount = Math.Min(PointsToUse, totalAfterDiscount);
+            TotalAmount = totalAfterDiscount - PointsDiscountAmount;
+
+            OnPropertyChanged(nameof(TotalAmount));
+            OnPropertyChanged(nameof(PointsDiscountAmount));
         }
     }
 }

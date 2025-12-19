@@ -27,7 +27,33 @@
 
             <TextBlock Text="Email"/>
             <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0,4,0,20"/>
+                     Margin="0,4,0,12"/>
+
+            <!-- Баллы лояльности -->
+            <Border Background="#FFFFF8F0"
+                    BorderBrush="{StaticResource OrangeBorder}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="12"
+                    Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Программа лояльности"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource OrangeText}"
+                               Margin="0,0,0,8"/>
+                    <TextBlock FontSize="18">
+                        <Run Text="Баллы: "/>
+                        <Run Text="{Binding LoyaltyPoints, Mode=OneWay}" FontWeight="Bold" Foreground="{StaticResource OrangeText}"/>
+                    </TextBlock>
+                    <TextBlock Text="1 балл = 1 рубль скидки"
+                               FontSize="11"
+                               Foreground="#FFB07340"
+                               Margin="0,4,0,0"/>
+                    <TextBlock Text="Начисляется 1% от суммы каждого заказа"
+                               FontSize="11"
+                               Foreground="#FFB07340"/>
+                </StackPanel>
+            </Border>
 
             <Button Content="Сохранить"
                     Style="{StaticResource PrimaryButton}"

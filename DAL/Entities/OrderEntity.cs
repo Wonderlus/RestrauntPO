@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -50,6 +50,12 @@ namespace DAL.Entities
         [Column("special_requests")]
         public string? SpecialRequests { get; set; }
         [Column("discount")]
-        public decimal Discount { get; set; } // ← НОВОЕ ПОЛЕ
+        public decimal Discount { get; set; }
+        
+        [Column("points_used")]
+        public int PointsUsed { get; set; } = 0;
+        
+        [Column("points_earned")]
+        public int PointsEarned { get; set; } = 0;
     }
 }

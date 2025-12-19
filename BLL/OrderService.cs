@@ -1,4 +1,4 @@
-﻿using DAL;
+using DAL;
 using DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -22,7 +22,8 @@ namespace BLL
     string orderType,
     int? deliveryAddressId,
     TimeSpan? deliveryEta,
-    string? specialRequests)
+    string? specialRequests,
+    int pointsToUse = 0)
         {
             using var context = new RestrauntContext();
 
@@ -37,14 +38,44 @@ namespace BLL
             // 1. Считаем сумму БЕЗ скидки
             decimal subtotal = basketItems.Sum(b => b.Dish.Price * b.Quantity);
 
-            // 2. Считаем коэффициент скидки
+            // 2. Считаем коэффициент скидки от суммы заказа
             decimal discount = CalculateDiscount(subtotal);
 
-            // 3. Итоговая сумма
-            decimal totalWithDiscount = subtotal * discount;
+            // 3. Сумма после скидки от суммы
+            decimal totalAfterDiscount = subtotal * discount;
 
+            // 4. Применяем скидку от баллов
+            var loyaltyService = new LoyaltyService();
+            decimal pointsDiscount = 0;
+            int actualPointsUsed = 0;
 
-            // 3. Создаём заказ
+            if (pointsToUse > 0)
+            {
+                int availablePoints = loyaltyService.GetCustomerPoints(customerId);
+                if (availablePoints < pointsToUse)
+                    throw new Exception("Недостаточно баллов для списания");
+
+                // Максимальная скидка от баллов не может превышать сумму заказа
+                actualPointsUsed = Math.Min(pointsToUse, (int)Math.Floor(totalAfterDiscount));
+                pointsDiscount = actualPointsUsed;
+                
+                // Списываем баллы
+                loyaltyService.DeductPoints(customerId, actualPointsUsed);
+            }
+
+            // 5. Итоговая сумма после всех скидок
+            decimal finalTotal = totalAfterDiscount - pointsDiscount;
+
+            // 6. Рассчитываем начисляемые баллы (1% от итоговой суммы)
+            int pointsEarned = loyaltyService.CalculatePointsToEarn(finalTotal);
+
+            // 7. Начисляем баллы
+            if (pointsEarned > 0)
+            {
+                loyaltyService.AddPoints(customerId, pointsEarned);
+            }
+
+            // 8. Создаём заказ
             var order = new OrderEntity
             {
                 CustomerId = customerId,
@@ -54,15 +85,16 @@ namespace BLL
                 DeliveryAddressId = deliveryAddressId,
                 DeliveryEta = deliveryEta,
                 SpecialRequests = specialRequests,
-                TotalAmount = totalWithDiscount,
-                Discount = discount
-                
+                TotalAmount = finalTotal,
+                Discount = discount,
+                PointsUsed = actualPointsUsed,
+                PointsEarned = pointsEarned
             };
 
             context.Orders.Add(order);
             context.SaveChanges();
 
-            // 4. Переносим позиции корзины в order_items
+            // 9. Переносим позиции корзины в order_items
             foreach (var item in basketItems)
             {
                 context.OrderItems.Add(new OrderItemEntity
@@ -75,9 +107,8 @@ namespace BLL
                 });
             }
 
-            // 5. Очищаем корзину
+            // 10. Очищаем корзину
             context.Basket.RemoveRange(basketItems);
-            Console.WriteLine($"Discount before save: {discount}");
             context.SaveChanges();
             return discount;
         }
@@ -199,7 +230,7 @@ namespace BLL
 
         
 
-        private decimal CalculateDiscount(decimal total)
+        public static decimal CalculateDiscount(decimal total)
         {
             // За каждую 1000 ₽ — 10%, максимум 40%
             int thousands = (int)(total / 1000);

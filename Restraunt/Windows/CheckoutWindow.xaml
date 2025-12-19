@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Оформление заказа"
         Width="500"
-        Height="680"
+        Height="750"
         WindowStartupLocation="CenterOwner"
         Background="{StaticResource OrangeBg}"
         ResizeMode="NoResize">
@@ -52,12 +52,44 @@
                      Height="80"
                      Margin="0,0,0,16"/>
 
+            <!-- Баллы лояльности -->
+            <Border Background="#FFFFF8F0"
+                    BorderBrush="{StaticResource OrangeBorder}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="12"
+                    Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Баллы лояльности"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8"/>
+                    <TextBlock>
+                        <Run Text="Доступно баллов: "/>
+                        <Run Text="{Binding AvailablePoints, Mode=OneWay}" FontWeight="SemiBold"/>
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <TextBlock Text="Использовать баллов: " VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBox Text="{Binding PointsToUse, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="80"
+                                 VerticalAlignment="Center"/>
+                        <TextBlock VerticalAlignment="Center" Margin="8,0,0,0">
+                            <Run Text="(скидка "/>
+                            <Run Text="{Binding PointsDiscountAmount, Mode=OneWay, StringFormat='{}{0:F2}'}"/>
+                            <Run Text=" ₽)"/>
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
             <!-- Итог -->
-            <TextBlock Text="{Binding TotalAmount, StringFormat=Итого: {0} ₽}"
-                       FontSize="16"
+            <TextBlock FontSize="16"
                        FontWeight="SemiBold"
                        Foreground="{StaticResource OrangeText}"
-                       Margin="0,0,0,20"/>
+                       Margin="0,0,0,20">
+                <Run Text="Итого: "/>
+                <Run Text="{Binding TotalAmount, Mode=OneWay, StringFormat='{}{0:F2}'}"/>
+                <Run Text=" ₽"/>
+            </TextBlock>
 
             <!-- Кнопки -->
             <StackPanel Orientation="Horizontal"

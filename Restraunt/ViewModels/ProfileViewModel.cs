@@ -10,6 +10,7 @@ namespace Restraunt.ViewModels
     public class ProfileViewModel : ViewModelBase
     {
         private readonly UserService _userService = new();
+        private readonly LoyaltyService _loyaltyService = new();
 
         private string _fullName = "";
         public string FullName
@@ -32,6 +33,8 @@ namespace Restraunt.ViewModels
             set { _email = value; OnPropertyChanged(); }
         }
 
+        public int LoyaltyPoints { get; private set; }
+
         public ICommand SaveCommand { get; }
 
         public ProfileViewModel()
@@ -43,6 +46,14 @@ namespace Restraunt.ViewModels
             FullName = Session.CurrentUser.FullName;
             Phone = Session.CurrentUser.Phone;
             Email = Session.CurrentUser.Email;
+            LoadLoyaltyPoints();
+        }
+
+        private void LoadLoyaltyPoints()
+        {
+            if (Session.CurrentUser == null) return;
+            LoyaltyPoints = _loyaltyService.GetCustomerPoints(Session.CurrentUser.Id);
+            OnPropertyChanged(nameof(LoyaltyPoints));
         }
 
         public void Save()
@@ -71,9 +82,15 @@ namespace Restraunt.ViewModels
                 Session.CurrentUser.FullName = FullName;
                 Session.CurrentUser.Phone = Phone;
                 Session.CurrentUser.Email = Email;
+                // Обновляем баллы в сессии
+                if (Session.CurrentUser != null)
+                {
+                    Session.CurrentUser.LoyaltyPoints = _loyaltyService.GetCustomerPoints(Session.CurrentUser.Id);
+                }
                 MessageBox.Show("Профиль сохранен");
                 // Уведомляем AppViewModel
                 Session.NotifyUserUpdated();
+                LoadLoyaltyPoints();
             }
             catch (Exception ex)
             {
