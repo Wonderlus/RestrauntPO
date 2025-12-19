@@ -27,7 +27,7 @@
             </StackPanel>
             <Button DockPanel.Dock="Right"
                     Style="{StaticResource PrimaryButton}"
-                    Content="+ Add new dish"
+                    Content="+ Добавить блюдо"
                     Command="{Binding AddDishCommand}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"

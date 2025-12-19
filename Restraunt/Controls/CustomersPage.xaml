@@ -9,14 +9,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <TextBlock Text="Customers"
+        <!-- Заголовок -->
+        <TextBlock Text="Клиенты"
                    FontSize="22"
                    FontWeight="Bold"
                    Foreground="{StaticResource OrangeText}"
                    Margin="0,0,0,12"/>
 
-        <!-- Table -->
+        <!-- Таблица -->
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Customers}"
                   AutoGenerateColumns="False"
@@ -24,22 +24,24 @@
                   IsReadOnly="True">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding FullName}" Width="*"/>
-                <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="150"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding FullName}" Width="*"/>
+                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="150"/>
                 <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200"/>
-                <DataGridCheckBoxColumn Header="Admin" Binding="{Binding IsAdmin}" Width="80"/>
+                <DataGridCheckBoxColumn Header="Админ" Binding="{Binding IsAdmin}" Width="80"/>
 
-                <!-- Actions -->
-                <DataGridTemplateColumn Header="Actions" Width="140">
+                <!-- Действия -->
+                <DataGridTemplateColumn Header="Действия" Width="140">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Admin"
+                                <Button Content="Админ"
+                                        Style="{StaticResource SmallButton}"
                                         Margin="0,0,6,0"
                                         Command="{Binding DataContext.ToggleAdminCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                         CommandParameter="{Binding}"/>
 
-                                <Button Content="Delete"
+                                <Button Content="Удалить"
+                                        Style="{StaticResource SmallButton}"
                                         Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                         CommandParameter="{Binding}"/>
                             </StackPanel>

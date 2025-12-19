@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Restraunt.Controls.UsersPage"
+<UserControl x:Class="Restraunt.Controls.UsersPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              >
@@ -9,14 +9,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <TextBlock Text="Users"
+        <!-- Заголовок -->
+        <TextBlock Text="Пользователи"
                    FontSize="22"
                    FontWeight="Bold"
                    Foreground="{StaticResource OrangeText}"
                    Margin="0,0,0,12"/>
 
-        <!-- Table -->
+        <!-- Таблица -->
         <DataGrid Grid.Row="1"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
@@ -24,10 +24,10 @@
                   CanUserAddRows="False">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding FullName}"/>
-                <DataGridTextColumn Header="Phone" Binding="{Binding Phone}"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding FullName}"/>
+                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}"/>
                 <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
-                <DataGridCheckBoxColumn Header="Admin" Binding="{Binding IsAdmin}"/>
+                <DataGridCheckBoxColumn Header="Админ" Binding="{Binding IsAdmin}"/>
             </DataGrid.Columns>
         </DataGrid>
 

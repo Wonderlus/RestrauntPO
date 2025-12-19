@@ -22,7 +22,8 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <CheckBox Content="{Binding Name}"
-                                  IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                  IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                  Margin="0,0,0,8"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -35,10 +36,12 @@
                        Margin="0,0,0,8"/>
 
             <CheckBox Content="Сезонные блюда"
-                      IsChecked="{Binding OnlySeasonal, Mode=TwoWay}"/>
+                      IsChecked="{Binding OnlySeasonal, Mode=TwoWay}"
+                      Margin="0,0,0,8"/>
 
             <CheckBox Content="Акционные блюда"
-                      IsChecked="{Binding OnlyPromotional, Mode=TwoWay}"/>
+                      IsChecked="{Binding OnlyPromotional, Mode=TwoWay}"
+                      Margin="0,0,0,8"/>
 
             <Separator Margin="0,16"/>
 

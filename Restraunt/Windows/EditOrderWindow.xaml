@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:conv="clr-namespace:Restraunt.Converters"
         Title="Редактирование заказа"
-        Width="420"
-        Height="520"
+        Width="450"
+        Height="620"
         WindowStartupLocation="CenterOwner"
         Background="{StaticResource OrangeBg}">
 

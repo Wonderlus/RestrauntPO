@@ -36,11 +36,14 @@
 
                 <Button Content="Удалить"
                         Width="100"
+                        Height="36"
                         Margin="0,0,8,0"
+                        Style="{StaticResource PrimaryButton}"
                         Command="{Binding RemoveCommand}"/>
 
                 <Button Content="Добавить"
                         Width="120"
+                        Height="36"
                         Style="{StaticResource PrimaryButton}"
                         Command="{Binding AddCommand}"/>
             </StackPanel>
