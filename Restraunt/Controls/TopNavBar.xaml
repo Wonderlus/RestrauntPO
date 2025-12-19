@@ -71,6 +71,12 @@
                 <Button Style="{StaticResource SidebarItemButton}"
                         Content="Адреса"
                         Command="{Binding NavigateToAddressesCommand}"/>
+
+                <Button Style="{StaticResource SidebarItemButton}"
+                        Content="Статистика"
+                        Command="{Binding NavigateToStatisticsCommand}"
+                        Visibility="{Binding IsAdmin,
+                                     Converter={StaticResource BoolToVisibility}}"/>
             </StackPanel>
 
             <!-- USER INFO -->

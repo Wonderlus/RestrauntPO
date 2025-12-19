@@ -30,6 +30,9 @@ public class AppViewModel : ViewModelBase
         NavigateToAddressesCommand = new RelayCommand(() => 
             WeakReferenceMessenger.Default.Send(new NavigateToPageMessage("Addresses")));
         
+        NavigateToStatisticsCommand = new RelayCommand(() => 
+            WeakReferenceMessenger.Default.Send(new NavigateToPageMessage("Statistics")));
+        
         LogoutCommand = new RelayCommand(() => 
             WeakReferenceMessenger.Default.Send(new LogoutMessage()));
     }
@@ -49,6 +52,7 @@ public class AppViewModel : ViewModelBase
     public ICommand NavigateToProfileCommand { get; }
     public ICommand NavigateToCustomersCommand { get; }
     public ICommand NavigateToAddressesCommand { get; }
+    public ICommand NavigateToStatisticsCommand { get; }
     public ICommand LogoutCommand { get; }
 
     public void RefreshUser()

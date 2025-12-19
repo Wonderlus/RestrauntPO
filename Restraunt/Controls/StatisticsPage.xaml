@@ -1,0 +1,212 @@
+<UserControl x:Class="Restraunt.Controls.StatisticsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="clr-namespace:Restraunt.Converters">
+
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+        <conv:StringEqualsToVisibilityConverter x:Key="StringEqualsToVisibility"/>
+    </UserControl.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Период и фильтры -->
+            <RowDefinition Height="Auto"/>
+            <!-- Общая статистика -->
+            <RowDefinition Height="Auto"/>
+            <!-- Заголовок -->
+            <RowDefinition Height="*"/>
+            <!-- Таблица -->
+        </Grid.RowDefinitions>
+
+        <!-- ================== ПЕРИОД И ФИЛЬТРЫ ================== -->
+        <StackPanel Grid.Row="0" 
+                    Orientation="Horizontal"
+                    Margin="0,0,0,16">
+            <TextBlock Text="Период:"
+                       VerticalAlignment="Center"
+                       Margin="0,0,8,0"/>
+
+            <DatePicker Width="130"
+                        SelectedDate="{Binding DateFrom}"/>
+
+            <TextBlock Text="—"
+                       VerticalAlignment="Center"
+                       Margin="6,0"/>
+
+            <DatePicker Width="130"
+                        SelectedDate="{Binding DateTo}"/>
+
+            <Button Content="Обновить"
+                    Style="{StaticResource PrimaryButton}"
+                    Margin="12,0,8,0"
+                    Command="{Binding LoadStatisticsCommand}"/>
+
+            <Button Content="Сбросить"
+                    Style="{StaticResource PrimaryButton}"
+                    Command="{Binding ResetPeriodCommand}"/>
+
+            <TextBlock Text="Вид:"
+                       VerticalAlignment="Center"
+                       Margin="24,0,8,0"/>
+
+            <ComboBox Width="120"
+                      ItemsSource="{Binding ViewTypes}"
+                      SelectedItem="{Binding SelectedViewType}"
+                      VerticalAlignment="Center"/>
+
+            <TextBlock Text="Сортировка:"
+                       VerticalAlignment="Center"
+                       Margin="12,0,8,0"/>
+
+            <ComboBox Width="180"
+                      ItemsSource="{Binding SortTypes}"
+                      SelectedItem="{Binding SelectedSortType}"
+                      VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- ================== ОБЩАЯ СТАТИСТИКА ================== -->
+        <Border Grid.Row="1"
+                Background="{StaticResource CardBg}"
+                BorderBrush="{StaticResource OrangeBorder}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="16"
+                Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Общая выручка"
+                               FontSize="14"
+                               Foreground="#FFB07340"
+                               Margin="0,0,0,4"/>
+                    <TextBlock FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource OrangeText}">
+                        <Run Text="{Binding TotalRevenue, Mode=OneWay, StringFormat='{}{0:F2}'}"/>
+                        <Run Text=" ₽"/>
+                    </TextBlock>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Visibility="{Binding SelectedViewType, Converter={StaticResource StringEqualsToVisibility}, ConverterParameter='Блюда'}">
+                    <TextBlock Text="Количество заказов"
+                               FontSize="14"
+                               Foreground="#FFB07340"
+                               Margin="0,0,0,4"/>
+                    <TextBlock Text="{Binding TotalOrders, Mode=OneWay}"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource OrangeText}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ================== ЗАГОЛОВОК ================== -->
+        <TextBlock Grid.Row="2"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Foreground="{StaticResource OrangeText}"
+                   Margin="0,0,0,12">
+            <Run Text="Статистика "/>
+            <Run Text="{Binding SelectedViewType}"/>
+        </TextBlock>
+
+        <!-- ================== ТАБЛИЦА СТАТИСТИКИ БЛЮД ================== -->
+        <DataGrid Grid.Row="3"
+                  ItemsSource="{Binding DishStatistics}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  Visibility="{Binding SelectedViewType, Converter={StaticResource StringEqualsToVisibility}, ConverterParameter='Блюда'}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название блюда" 
+                                    Binding="{Binding DishName}" 
+                                    Width="2*"/>
+                <DataGridTextColumn Header="Категория" 
+                                    Binding="{Binding CategoryName}" 
+                                    Width="*"/>
+                <DataGridTextColumn Header="Текущая цена" 
+                                    Width="120">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="CurrentPrice" StringFormat="{}{0:F2} ₽"/>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Кол-во порций" 
+                                    Binding="{Binding TotalQuantity}" 
+                                    Width="120"/>
+                <DataGridTextColumn Header="Кол-во заказов" 
+                                    Binding="{Binding OrderCount}" 
+                                    Width="120"/>
+                <DataGridTextColumn Header="Общая выручка" 
+                                    Width="150">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="TotalRevenue" Mode="OneWay" StringFormat="{}{0:F2} ₽"/>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Средняя цена" 
+                                    Width="130">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="AveragePrice" Mode="OneWay" StringFormat="{}{0:F2} ₽"/>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Среднее в заказе" 
+                                    Width="140">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="AverageQuantityPerOrder" Mode="OneWay" StringFormat="{}{0:F2}"/>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- ================== ТАБЛИЦА СТАТИСТИКИ КАТЕГОРИЙ ================== -->
+        <DataGrid Grid.Row="3"
+                  ItemsSource="{Binding CategoryStatistics}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  Visibility="{Binding SelectedViewType, Converter={StaticResource StringEqualsToVisibility}, ConverterParameter='Категории'}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Категория" 
+                                    Binding="{Binding CategoryName}" 
+                                    Width="2*"/>
+                <DataGridTextColumn Header="Кол-во блюд" 
+                                    Binding="{Binding DishCount}" 
+                                    Width="120"/>
+                <DataGridTextColumn Header="Кол-во порций" 
+                                    Binding="{Binding TotalQuantity}" 
+                                    Width="150"/>
+                <DataGridTextColumn Header="Общая выручка" 
+                                    Width="200">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="TotalRevenue" Mode="OneWay" StringFormat="{}{0:F2} ₽"/>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- ================== СООБЩЕНИЕ ЕСЛИ НЕТ ДАННЫХ ================== -->
+        <TextBlock Grid.Row="3"
+                   Text="Нет данных за выбранный период"
+                   FontSize="16"
+                   Foreground="#FFB07340"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasStatistics, Mode=OneWay}" Value="False">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+    </Grid>
+</UserControl>

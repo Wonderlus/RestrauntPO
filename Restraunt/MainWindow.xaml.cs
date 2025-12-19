@@ -44,6 +44,9 @@ namespace Restraunt
                     case "Addresses":
                         NavigateToAddresses();
                         break;
+                    case "Statistics":
+                        NavigateToStatistics();
+                        break;
                 }
             });
 
@@ -119,6 +122,12 @@ namespace Restraunt
                 DataContext = vm
             };
 
+            SidebarHost.SetEmptySidebar();
+        }
+
+        public void NavigateToStatistics()
+        {
+            Navigate(new StatisticsPage());
             SidebarHost.SetEmptySidebar();
         }
 

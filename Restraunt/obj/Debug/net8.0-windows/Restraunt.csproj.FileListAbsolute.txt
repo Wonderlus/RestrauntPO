@@ -153,3 +153,5 @@ C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug\net8.0-windows\RBush.dll
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug\net8.0-windows\SixLabors.Fonts.dll
 C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\bin\Debug\net8.0-windows\System.IO.Packaging.dll
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\StatisticsPage.g.cs
+C:\Coding\ISPU\Конструирование ПО\Restraunt\Restraunt\obj\Debug\net8.0-windows\Controls\StatisticsPage.baml
